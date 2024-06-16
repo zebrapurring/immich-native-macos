@@ -1,18 +1,14 @@
-# Native Immich
+# Native Immich on macOS
 
-This repository provides instructions and helper scripts to install [Immich](https://github.com/immich-app/immich) without Docker, natively.
-
-macOS installation is available in the [README-macOS.md](./README-macOS.md)
+Installing immich natively on macOS is 99% the same as installing on linux. This document highlights the differences
 
 ### Notes
 
- * This is tested on Ubuntu 22.04 (on both x86 and aarch64) as the host distro, but it will be similar on other distros.
+ * This is tested on macOS Monterey and Sonoma (x86).
 
- * This guide installs Immich to `/var/lib/immich`. To change it, replace it to the directory you want in this README and `install.sh`'s `$IMMICH_PATH`.
+ * This guide installs Immich to `/opt/services/immich`. To change it, replace it to the directory you want in this README and `install.sh`'s `$IMMICH_PATH`.
 
  * The [install.sh](install.sh) script currently is using Immich v1.106.4. It should be noted that due to the fast-evolving nature of Immich, the install script may get broken if you replace the `$TAG` to something more recent.
-
- * `mimalloc` is deliberately disabled as this is a native install and sharing system library makes more sense.
 
  * `pgvector` is used instead of `pgvecto.rs` that the official Immich uses to remove an additional Rust build dependency.
 
@@ -22,141 +18,27 @@ macOS installation is available in the [README-macOS.md](./README-macOS.md)
 
  * JPEG XL support may differ official Immich due to base-image's dependency differences.
 
-## 1. Install dependencies
+## 1. Install brew
 
- * [Node.js](https://github.com/nodesource/distributions)
-
- * [PostgreSQL](https://www.postgresql.org/download/linux)
-
- * [Redis](https://redis.io/docs/install/install-redis/install-redis-on-linux)
-
-As the time of writing, Node.js v20 LTS, PostgreSQL 16 and Redis 7.2.4 was used.
-
- * [pgvector](https://github.com/pgvector/pgvector)
-
-pgvector is included in the official PostgreSQL's APT repository:
+This script will install all dependencies as long as brew is installed
+See [brew.sh](https://brew.sh) for details about brew
 
 ``` bash
-sudo apt install postgresql(-16)-pgvector
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
- * [FFmpeg](https://github.com/FFmpeg/FFmpeg)
+## 2. Execute the install script
 
-Immich uses FFmpeg to process media.
+This script is written to be launched as the currently logged in user (the user that installed brew). Some parts of the script require root permissions, you'll be prompted to enter your password.
 
-FFmpeg provided by the distro is typically too old.
-Either install it from [jellyfin](https://github.com/jellyfin/jellyfin-ffmpeg/releases)
-or use [FFmpeg Static Builds](https://johnvansickle.com/ffmpeg) and install it to `/usr/bin`.
+The things that the script does as root:
+- create the immich user
+- install the LaunchDaemon scripts
+- create the immich directories with appropriate permissions
+- runs the install script as the immich user
 
-### Other APT packages
-
-``` bash
-sudo apt install --no-install-recommends \
-        python3-venv \
-        python3-dev \
-        uuid-runtime \
-        autoconf \
-        build-essential \
-        jq \
-        perl \
-        libnet-ssleay-perl \
-        libio-socket-ssl-perl \
-        libcapture-tiny-perl \
-        libfile-which-perl \
-        libfile-chdir-perl \
-        libpkgconfig-perl \
-        libffi-checklib-perl \
-        libtest-warnings-perl \
-        libtest-fatal-perl \
-        libtest-needs-perl \
-        libtest2-suite-perl \
-        libsort-versions-perl \
-        libpath-tiny-perl \
-        libtry-tiny-perl \
-        libterm-table-perl \
-        libany-uri-escape-perl \
-        libmojolicious-perl \
-        libfile-slurper-perl \
-        liblcms2-2 \
-        wget
-```
-
-A separate Python's virtualenv will be stored to `/var/lib/immich`.
-
-## 2. Prepare `immich` user
-
-This guide isolates Immich to run on a separate `immich` user.
-
-This provides basic permission isolation and protection.
-
-``` bash
-sudo adduser \
-  --home /var/lib/immich/home \
-  --shell=/sbin/nologin \
-  --no-create-home \
-  --disabled-password \
-  --disabled-login \
-  immich
-sudo mkdir -p /var/lib/immich
-sudo chown immich:immich /var/lib/immich
-sudo chmod 700 /var/lib/immich
-```
-
-## 3. Prepare PostgreSQL DB
-
-Create a strong random string to be used with PostgreSQL immich database.
-
-You need to save this and write to the `env` file later.
-
-``` bash
-sudo -u postgres psql
-postgres=# create database immich;
-postgres=# create user immich with encrypted password 'YOUR_STRONG_RANDOM_PW';
-postgres=# grant all privileges on database immich to immich;
-postgrse=# ALTER USER immich WITH SUPERUSER;
-postgres=# \q
-```
-
-## 4. Prepare `env`
-
-Save the [env](env) file to `/var/lib/immich`, and configure on your own.
-
-You'll only have to set `DB_PASSWORD`.
-
-``` bash
-sudo cp env /var/lib/immich
-sudo chown immich:immich /var/lib/immich/env
-```
-
-## 5. Build and install Immich
-
-Clone this repository to somewhere anyone can access (like /tmp) and run `install.sh` as root.
-
-Anytime Immich is updated, all you have to do is run it again.
-
-In summary, the `install.sh` script does the following:
-
-#### 1. Clones and builds Immich.
-
-#### 2. Installs Immich to `/var/lib/immich` with minor patches.
-
-  * Sets up a dedicated Python venv to `/var/lib/immich/app/machine-learning/venv`.
-
-  * Replaces `/usr/src` to `/var/lib/immich`.
-
-  * Limits listening host from 0.0.0.0 to 127.0.0.1. If you do not want this to happen (make sure you fully understand the security risks!), comment out the `sed` command in `install.sh`'s "Use 127.0.0.1" part.
-
-## 6. Install systemd services
-
-Because the install script switches to the immich user during installation, you must install systemd services manually:
-
-``` bash
-sudo cp immich*.service /etc/systemd/system/
-sudo systemctl daemon-reload
-for i in immich*.service; do
-  sudo systemctl enable $i
-  sudo systemctl start $i
-done
+```bash
+sh ./install.sh
 ```
 
 ## Done!
@@ -169,29 +51,16 @@ Please add firewall rules and apply https proxy and secure your Immich instance.
 
 ## Uninstallation
 
+Uninstallation is now done by executing the uninstall.sh script as root
+The script will:
+- stop immich from running
+- delete the LaunchDaemon scripts
+- delete the immich user and group
+- delete the database user AND DATABASE
+- delete the immich directories
+
+WARNING: running the uninstall script will remove everything that was uploaded to immich
+
 ``` bash
-# Run as root!
-
-# Remove Immich systemd services
-for i in immich*.service; do
-  systemctl stop $i
-  systemctl disable $i
-done
-rm /etc/systemd/system/immich*.service
-systemctl daemon-reload
-
-# Remove Immich files
-rm -rf /var/lib/immich
-
-# Delete immich user
-deluser immich
-
-# Remove Immich DB
-sudo -u postgres psql
-postgres=# drop user immich;
-postgres=# drop database immich;
-postgres=# \q
-
-# Optionally remove dependencies
-# Review /var/log/apt/history.log and remove packages you've installed
+sudo sh ./uninstall.sh
 ```
