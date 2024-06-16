@@ -12,7 +12,7 @@ PASSWD=$(date +%s)
 BASEDIR=$(dirname "$0")
 
 function createUser {
-	echo "INFO: creating immich user"
+  echo "INFO: creating immich user"
   sudo -u immich echo 2> /dev/null || (
     dscl . -create "/Groups/immich" && \
     dscl . -create "/Groups/immich" RealName immich && \
@@ -67,7 +67,7 @@ EOF
 }
 
 function createImmichPaths {
-	echo "INFO: creating immich paths"
+  echo "INFO: creating immich paths"
   sudo mkdir -p $IMMICH_PATH
   sudo chown immich:immich $IMMICH_PATH
   sudo mkdir -p /var/log/immich
@@ -94,7 +94,7 @@ if [[ "$USER" == "root" ]]; then
 fi
 
 if [[ "$USER" == "immich" ]]; then
-	cd /tmp/ 2> /dev/null
+  cd /tmp/ 2> /dev/null
   umask 077
 
   rm -rf $APP
