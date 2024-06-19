@@ -1,7 +1,6 @@
 #!/bin/sh
 
 echo "INFO:  install daemons"
-BASEDIR="$(dirname "$0")"
 
 # blindly try to unload
 launchctl unload -w /Library/LaunchDaemons/com.immich.plist > /dev/null 2>&1
