@@ -1,14 +1,14 @@
-# Native Immich on macOS
+# Unofficial Immich Installer
 
-Installing immich natively on macOS is 99% the same as installing on linux. This document highlights the differences
+If you want to install immich natively on linux, visit [arter97's repo](https://github.com/arter97/immich-native) for instructions and scripts to install immich on linux.
 
 ### Notes
 
  * This is tested on macOS Monterey and Sonoma (x86).
 
- * This guide installs Immich to `/opt/services/immich`. To change it, replace it to the directory you want in this README and `install.sh`'s `$IMMICH_PATH`.
+ * This installer will install Immich to `/opt/services/immich`.
 
- * The [install.sh](install.sh) script currently is using Immich v1.106.4. It should be noted that due to the fast-evolving nature of Immich, the install script may get broken if you replace the `$TAG` to something more recent.
+ * The installer currently is using Immich v1.106.4. It should be noted that due to the fast-evolving nature of Immich, the install script may get broken if you replace the `$TAG` to something more recent.
 
  * `pgvector` is used instead of `pgvecto.rs` that the official Immich uses to remove an additional Rust build dependency.
 
@@ -20,25 +20,29 @@ Installing immich natively on macOS is 99% the same as installing on linux. This
 
 ## 1. Install brew
 
-This script will install all dependencies as long as brew is installed
+The installer will install all dependencies as long as brew is installed
 See [brew.sh](https://brew.sh) for details about brew
 
 ``` bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-## 2. Execute the install script
+## 2. Installing
 
-This script is written to be launched as the currently logged in user (the user that installed brew). Some parts of the script require root permissions, you'll be prompted to enter your password.
+Download the pkg file (from releases) and install it. The installer requires administrator privileges.
 
-The things that the script does as root:
+The things that the installer does as root:
 - create the immich user
 - install the LaunchDaemon scripts
 - create the immich directories with appropriate permissions
 - runs the install script as the immich user
 
+### Building the package from source
+
+run the build.sh script to create a pkg file.
+
 ```bash
-sh ./install.sh
+./build.sh
 ```
 
 ## Done!

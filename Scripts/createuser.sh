@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo "INFO: create user"
+
+IMMICH_PATH=/opt/services/immich
+HOME=$IMMICH_PATH/home
+
+sudo -u immich echo 2> /dev/null || (
+dscl . -create "/Groups/immich" && \
+  dscl . -create "/Groups/immich" RealName immich && \
+  dscl . -create "/Groups/immich" passwd "*" && \
+  dscl . -create "/Groups/immich" gid 9999 && \
+  dscl . -create "/Users/immich" && \
+  dscl . -create "/Users/immich" UserShell /sbin/nologin && \
+  dscl . -create "/Users/immich" RealName immich && \
+  dscl . -create "/Users/immich" UniqueID 9999 && \
+  dscl . -create "/Users/immich" PrimaryGroupID 9999 && \
+  dscl . -create "/Users/immich" NFSHomeDirectory "$HOME" && \
+  dscl . -create "/Users/immich" passwd "*" && \
+  dscl . -create "/Groups/immich" GroupMembership immich
+)
