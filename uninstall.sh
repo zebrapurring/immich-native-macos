@@ -19,8 +19,8 @@ function uninstallDaemons {
 function deletePostgresUser {
 	echo "INFO: deleting postgres user"
   sudo -u $REALUSER psql postgres << EOF
-drop user immich;
 drop database immich;
+drop user immich;
 EOF
 }
 
