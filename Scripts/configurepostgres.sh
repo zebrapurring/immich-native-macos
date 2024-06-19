@@ -5,7 +5,7 @@ echo "INFO: configure postgresql"
 ME=$(whoami)
 
 if [ "$USER" != "$ME" ]; then
-  su -l $USER -c "$0" $* || exit 1
+  sudo -u $USER "$0" $* || exit 1
 else
   PASSWD=$1
   [ -z "$PASSWD" ] && exit 1
