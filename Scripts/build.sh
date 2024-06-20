@@ -8,6 +8,10 @@ BASEDIR="$(dirname "$0")"
 PATH=/usr/local/bin:$PATH
 
 if [[ "$USER" != "immich" ]]; then
+  rm -rf "$IMMICH_PATH/home" 2> /dev/null
+  mkdir -p "$IMMICH_PATH/home"
+  chown immich:immich "$IMMICH_PATH/home"
+
   cp "$0" /tmp/
   s="/tmp/$(basename "$0")"
   chown immich:immich $s
@@ -24,8 +28,6 @@ umask 077
 rm -rf $APP
 mkdir -p $APP
 
-rm -rf "$IMMICH_PATH/home"
-mkdir -p "$IMMICH_PATH/home"
 echo 'umask 077' > "$IMMICH_PATH/home/.bashrc"
 
 export HOME="$IMMICH_PATH/home"
