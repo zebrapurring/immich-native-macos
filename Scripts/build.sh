@@ -84,6 +84,11 @@ python3 -m venv $APP/machine-learning/venv
     poetry update
   fi
   poetry install --no-root --with dev --with cpu
+
+  # downgrade to numpy 1
+  pip3 uninstall -y numpy
+  pip3 install numpy==1.26.4
+
   cd ..
 )
 cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/machine-learning/
