@@ -12,6 +12,7 @@ if [[ "$USER" != "immich" ]]; then
   mkdir -p "$IMMICH_PATH/home"
   chown immich:immich "$IMMICH_PATH/home"
 
+  # move to a place were immich has permission
   cp "$0" /tmp/
   s="/tmp/$(basename "$0")"
   chown immich:immich $s
@@ -70,6 +71,9 @@ cd -
 
 echo "INFO building machine learning"
 # immich-machine-learning
+alias python3=python3.11
+alias pip3=pip3.11
+
 mkdir -p $APP/machine-learning
 python3 -m venv $APP/machine-learning/venv
 (
@@ -77,18 +81,7 @@ python3 -m venv $APP/machine-learning/venv
   . $APP/machine-learning/venv/bin/activate
   pip3 install poetry
   cd machine-learning
-  if python -c 'import sys; exit(0) if sys.version_info.major == 3 and sys.version_info.minor > 11 else exit(1)'; then
-    echo "Python > 3.11 detected, forcing poetry update"
-    # Allow Python 3.12 (e.g., Ubuntu 24.04)
-    sed -i -e 's/<3.12/<4/g' pyproject.toml
-    poetry update
-  fi
   poetry install --no-root --with dev --with cpu
-
-  # downgrade to numpy 1
-  pip3 uninstall -y numpy
-  pip3 install numpy==1.26.4
-
   cd ..
 )
 cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/machine-learning/
