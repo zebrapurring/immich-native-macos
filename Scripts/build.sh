@@ -89,10 +89,10 @@ cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/m
 echo "INFO: reconfiguring"
 # Replace /usr/src
 cd $APP
-grep -Rl /usr/src | xargs -n1 sed -i -e "s@/usr/src@$IMMICH_PATH@g"
+grep -Rl /usr/src | xargs -n1 sed -i "" -e "s@/usr/src@$IMMICH_PATH@g"
 ln -sf $IMMICH_PATH/app/resources $IMMICH_PATH/
 mkdir -p $IMMICH_PATH/cache
-sed -i -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" $APP/machine-learning/app/config.py
+sed -i "" -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" $APP/machine-learning/app/config.py
 
 # Install GeoNames
 cd $IMMICH_PATH/app/resources
@@ -114,9 +114,6 @@ npm install sharp
 mkdir -p $IMMICH_PATH/upload
 ln -s $IMMICH_PATH/upload $APP/
 ln -s $IMMICH_PATH/upload $APP/machine-learning/
-
-# Use 127.0.0.1
-sed -i -e "s@app.listen(port)@app.listen(port, '127.0.0.1')@g" $APP/dist/main.js
 
 # Custom start.sh script
 cat <<EOF > $APP/start.sh
