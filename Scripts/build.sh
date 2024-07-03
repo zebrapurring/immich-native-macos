@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TAG=v1.106.4
+TAG=v1.107.2
 IMMICH_PATH=/opt/services/immich
 APP=$IMMICH_PATH/app
 PASSWD="$1"
@@ -22,25 +22,20 @@ fi
 
 echo "INFO: building immich"
 
-set -euo pipefail
-
-umask 077
-
-rm -rf $APP
-mkdir -p $APP
-
-echo 'umask 077' > "$IMMICH_PATH/home/.bashrc"
-
 export HOME="$IMMICH_PATH/home"
 
-echo "INFO: cloning"
+set -euo pipefail
+umask 077
+
+echo 'umask 077' > "$HOME/.bashrc"
+
+echo "INFO: cloning immich repo"
 TMP="/tmp/immich-$(uuidgen)"
 git clone https://github.com/immich-app/immich $TMP
 cd $TMP
 git reset --hard $TAG
 
 echo "INFO: building the server"
-# immich-server
 cd server
 npm ci
 npm run build
@@ -60,17 +55,21 @@ npm run build
 cd -
 
 echo "INFO: copying to destination directory"
+rm -rf $APP
+mkdir -p $APP
+
 cp -a server/node_modules server/dist server/bin $APP/
 cp -a web/build $APP/www
 cp -a server/resources server/package.json server/package-lock.json $APP/
 cp -a server/start*.sh $APP/
 cp -a LICENSE $APP/
+
 cd $APP
 npm cache clean --force
 cd -
 
 echo "INFO building machine learning"
-# immich-machine-learning
+# force use of python3.11
 alias python3=python3.11
 alias pip3=pip3.11
 
@@ -84,7 +83,7 @@ python3 -m venv $APP/machine-learning/venv
   poetry install --no-root --with dev --with cpu
   cd ..
 )
-cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/machine-learning/
+cp -a machine-learning/ann machine-learning/app $APP/machine-learning/
 
 echo "INFO: reconfiguring"
 # Replace /usr/src
@@ -93,6 +92,7 @@ grep -Rl /usr/src | xargs -n1 sed -i "" -e "s@/usr/src@$IMMICH_PATH@g"
 ln -sf $IMMICH_PATH/app/resources $IMMICH_PATH/
 mkdir -p $IMMICH_PATH/cache
 sed -i "" -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" $APP/machine-learning/app/config.py
+npm install sharp
 
 # Install GeoNames
 cd $IMMICH_PATH/app/resources
@@ -105,10 +105,6 @@ unzip cities500.zip
 date -Iseconds | tr -d "\n" > geodata-date.txt
 
 rm cities500.zip
-
-# Install sharp
-cd $APP
-npm install sharp
 
 # Setup upload directory
 mkdir -p $IMMICH_PATH/upload
