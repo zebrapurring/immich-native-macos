@@ -180,5 +180,8 @@ IMMICH_MACHINE_LEARNING_URL=http://127.0.0.1:3003
 REDIS_HOSTNAME=127.0.0.1
 EOF
 
+chmod 700 $APP/start.sh
+chmod 700 $APP/machine-learning/start.sh
+
 # Cleanup
 rm -rf $TMP /tmp/$(basename "$0")
