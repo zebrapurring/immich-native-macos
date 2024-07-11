@@ -1,3 +1,3 @@
-TAG=v1.107.2
+TAG=v1.108.0
 mkdir -p dist/$TAG
 pkgbuild --version $TAG --root LaunchDaemons --identifier com.unofficial.immich.installer --scripts Scripts --install-location /Library/LaunchDaemons dist/$TAG/Unofficial\ Immich\ Installer.pkg

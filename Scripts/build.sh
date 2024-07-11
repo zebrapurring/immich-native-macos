@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TAG=v1.107.2
+TAG=v1.108.0
 IMMICH_PATH=/opt/services/immich
 APP=$IMMICH_PATH/app
 PASSWD="$1"
@@ -65,6 +65,9 @@ cp -a server/start*.sh $APP/
 cp -a LICENSE $APP/
 
 cd $APP
+# v1.108.0 now loads geodata using IMMICH_BUILD_DATA env var, which appears to also
+# be used in other places
+ln -sf resources/* .
 npm cache clean --force
 cd -
 
@@ -166,6 +169,8 @@ NODE_ENV=production
 DB_USERNAME=immich
 DB_DATABASE_NAME=immich
 DB_VECTOR_EXTENSION=pgvector
+
+IMMICH_BUILD_DATA=$IMMICH_PATH/app
 
 # The location where your uploaded files are stored
 UPLOAD_LOCATION=./library
