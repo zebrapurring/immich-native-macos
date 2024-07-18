@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TAG=v1.108.0
+TAG=v1.109.1
 IMMICH_PATH=/opt/services/immich
 APP=$IMMICH_PATH/app
 PASSWD="$1"
@@ -65,7 +65,7 @@ cp -a server/start*.sh $APP/
 cp -a LICENSE $APP/
 
 cd $APP
-# v1.108.0 now loads geodata using IMMICH_BUILD_DATA env var, which appears to also
+# v1.108.0 and above now loads geodata using IMMICH_BUILD_DATA env var, which appears to also
 # be used in other places
 ln -sf resources/* .
 npm cache clean --force
