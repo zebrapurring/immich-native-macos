@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TAG=v1.112.1
+TAG=v1.113.0
 IMMICH_PATH=/opt/services/immich
 APP=$IMMICH_PATH/app
 PASSWD="$1"
@@ -102,6 +102,7 @@ cd $IMMICH_PATH/app/resources
 wget -o - https://download.geonames.org/export/dump/admin1CodesASCII.txt &
 wget -o - https://download.geonames.org/export/dump/admin2Codes.txt &
 wget -o - https://download.geonames.org/export/dump/cities500.zip &
+wget -o - https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson &
 wait
 unzip cities500.zip
 
