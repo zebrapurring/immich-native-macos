@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TAG=v1.113.0
+TAG=v1.115.0
 IMMICH_PATH=/opt/services/immich
 APP=$IMMICH_PATH/app
 PASSWD="$1"
