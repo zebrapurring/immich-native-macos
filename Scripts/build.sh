@@ -92,6 +92,8 @@ echo "INFO: reconfiguring"
 # Replace /usr/src
 cd $APP
 grep -Rl /usr/src | xargs -n1 sed -i "" -e "s@/usr/src@$IMMICH_PATH@g"
+grep -Rl 'out_color_matrix=601' | xargs -n1 sed -i "" -e 's/=601/=bt601/g'
+
 ln -sf $IMMICH_PATH/app/resources $IMMICH_PATH/
 mkdir -p $IMMICH_PATH/cache
 sed -i "" -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" $APP/machine-learning/app/config.py
@@ -109,6 +111,7 @@ unzip cities500.zip
 date -Iseconds | tr -d "\n" > geodata-date.txt
 
 rm cities500.zip
+ln -s $IMMICH_PATH/app/resources $IMMICH_PATH/app/geodata
 
 # Setup upload directory
 mkdir -p $IMMICH_PATH/upload
