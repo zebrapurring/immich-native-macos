@@ -2,12 +2,17 @@
 
 ME=$(whoami)
 
+. ./config.sh || exit 1
+
+if [ -z "$TAG" ]; then
+  echo "DEBUG: config not working"
+  exit 1
+fi
+
 if [ "$USER" != "$ME" ]; then
   su -l $USER -c "$0" $* || exit 1
 else
   echo "INFO:  install dependencies"
-
-  export PATH=/usr/local/bin:$PATH
 
   [ -z "$(which brew)" ] && echo "Brew is not installed" && exit 1
 

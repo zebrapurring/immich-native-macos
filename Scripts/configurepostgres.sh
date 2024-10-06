@@ -2,6 +2,13 @@
 
 echo "INFO: configure postgresql"
 
+. ./config.sh || exit 1
+
+if [ -z "$TAG" ]; then
+  echo "DEBUG: config not working"
+  exit 1
+fi
+
 ME=$(whoami)
 
 if [ "$USER" != "$ME" ]; then
@@ -9,8 +16,6 @@ if [ "$USER" != "$ME" ]; then
 else
   PASSWD=$1
   [ -z "$PASSWD" ] && exit 1
-
-  export PATH=/usr/local/bin:$PATH
 
   psql postgres << EOF
 create database immich;

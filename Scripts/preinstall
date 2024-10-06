@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PASSWORD=$(date +%s)
+echo "export PASSWORD=$PASSWORD" >> $(pwd)/config.sh || exit 
+
+. $(pwd)/config.sh || exit
+
+sh $(pwd)/createlog.sh || exit 1
+sh $(pwd)/installdependencies.sh >> /tmp/immich-install.log 2>&1 || exit 1
+sh $(pwd)/configurepostgres.sh $PASSWORD >> /tmp/immich-install.log 2>&1 || exit 1
+

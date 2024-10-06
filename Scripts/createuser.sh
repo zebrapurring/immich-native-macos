@@ -2,8 +2,11 @@
 
 echo "INFO: create user"
 
-IMMICH_PATH=/opt/services/immich
-HOME=$IMMICH_PATH/home
+. ./config.sh || exit 1
+if [ -z "$TAG" ]; then
+  echo "DEBUG: config not working"
+  exit 1
+fi
 
 sudo -u immich echo 2> /dev/null || (
 dscl . -create "/Groups/immich" && \

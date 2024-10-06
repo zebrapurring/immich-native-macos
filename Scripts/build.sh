@@ -1,19 +1,25 @@
 #!/bin/sh
 
-TAG=v1.116.2
-IMMICH_PATH=/opt/services/immich
-APP=$IMMICH_PATH/app
+. ./config.sh || exit 1
+
+if [ -z "$TAG" ]; then
+  echo "DEBUG: config not working"
+  exit 1
+fi
+
 PASSWD="$1"
-BASEDIR="$(dirname "$0")"
-PATH=/usr/local/bin:$PATH
 
 if [[ "$USER" != "immich" ]]; then
+  echo "DEBUG: going to switch to immich user"
   rm -rf "$IMMICH_PATH/home" 2> /dev/null
   mkdir -p "$IMMICH_PATH/home"
   chown immich:immich "$IMMICH_PATH/home"
 
   # move to a place were immich has permission
-  cp "$0" /tmp/
+  cwd=$(dirname "$0")
+  echo "DEBUG: copying scripts to accessible location"
+  cp "$0" "config.sh" /tmp/
+
   s="/tmp/$(basename "$0")"
   chown immich:immich $s
   sudo -u immich "$s" $* 2>&1 || exit 1
