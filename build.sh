@@ -13,8 +13,8 @@ pkgbuild --version $TAG --root LaunchDaemons --identifier com.unofficial.immich.
 # need to increase script timeouts
 cd "dist/$TAG"
 pkgutil --expand Unofficial\ Immich\ Installer.pkg contents
-sed -i ".bak" -e 's/300/3600/g' contents/PackageInfo
-rm contents/Bom
+sed -i ".bak" -e 's/600/3600/g' contents/PackageInfo
+rm -f contents/Bom contents/*.bak
 mkbom contents contents/Bom
 pkgutil --flatten contents Unofficial\ Immich\ Installer.pkg
 rm -rf contents
