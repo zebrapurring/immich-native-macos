@@ -1,7 +1,5 @@
 . ./Scripts/config.sh
 
-# TAG=v1.117.0
-
 if [ -z "$TAG" ]; then
   echo "DEBUG: config not working"
   exit 1

@@ -128,6 +128,7 @@ ln -s $IMMICH_PATH/upload $APP/machine-learning/
 cat <<EOF > $APP/start.sh
 #!/bin/bash
 
+export IMMICH_PORT=3001
 export HOME=$IMMICH_PATH/home
 export PATH=\$PATH:/usr/local/bin
 
