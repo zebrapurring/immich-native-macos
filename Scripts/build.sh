@@ -75,6 +75,7 @@ cd $APP
 # be used in other places
 ln -sf resources/* .
 npm cache clean --force
+npm install --os=darwin --cpu=x64 sharp
 cd -
 
 echo "INFO building machine learning"
@@ -93,12 +94,6 @@ python3 -m venv $APP/machine-learning/venv
   cd ..
 )
 cp -a machine-learning/ann machine-learning/app $APP/machine-learning/
-
-echo "INFO: reconfiguring"
-# Replace /usr/src
-cd $APP
-grep -Rl /usr/src | xargs -n1 sed -i "" -e "s@/usr/src@$IMMICH_PATH@g"
-grep -Rl 'out_color_matrix=601' | xargs -n1 sed -i "" -e 's/=601/=bt601/g'
 
 ln -sf $IMMICH_PATH/app/resources $IMMICH_PATH/
 mkdir -p $IMMICH_PATH/cache
