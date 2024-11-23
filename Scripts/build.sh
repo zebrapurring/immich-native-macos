@@ -90,7 +90,7 @@ python3 -m venv $APP/machine-learning/venv
   . $APP/machine-learning/venv/bin/activate
   pip3 install poetry
   cd machine-learning
-  poetry install --no-root --with dev --with cpu
+  poetry install --no-root --with dev --with cpu || python3 -m pip install onnxruntime
   cd ..
 )
 cp -a machine-learning/ann machine-learning/app $APP/machine-learning/
