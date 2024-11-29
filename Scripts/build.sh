@@ -9,7 +9,7 @@ if [ -z "${IMMICH_USER:-}" ]; then
   # Load configuration when running as immich user with `sudo`
   # shellcheck disable=SC1091
   . "$(dirname "$0")/config.sh"
-  export HOME="$IMMICH_HOME"
+  export HOME="$IMMICH_HOME_DIR"
 fi
 
 if [ "$USER" != "$IMMICH_USER" ]; then
@@ -54,16 +54,16 @@ npm run build
 cd -
 
 echo "INFO: copying to destination directory"
-rm -rf "$APP"
-mkdir -p "$APP"
+rm -rf "$IMMICH_APP_DIR"
+mkdir -p "$IMMICH_APP_DIR"
 
-cp -a server/node_modules server/dist server/bin "$APP/"
-cp -a web/build "$APP/www"
-cp -a server/resources server/package.json server/package-lock.json "$APP/"
-cp -a server/start*.sh "$APP/"
-cp -a LICENSE "$APP/"
+cp -a server/node_modules server/dist server/bin "$IMMICH_APP_DIR/"
+cp -a web/build "$IMMICH_APP_DIR/www"
+cp -a server/resources server/package.json server/package-lock.json "$IMMICH_APP_DIR/"
+cp -a server/start*.sh "$IMMICH_APP_DIR/"
+cp -a LICENSE "$IMMICH_APP_DIR/"
 
-cd "$APP"
+cd "$IMMICH_APP_DIR"
 # v1.108.0 and above now loads geodata using IMMICH_BUILD_DATA env var, which appears to also
 # be used in other places
 ln -sf resources/* .
@@ -76,26 +76,26 @@ echo "INFO building machine learning"
 alias python3=python3.11
 alias pip3=pip3.11
 
-mkdir -p "$APP/machine-learning"
-python3 -m venv "$APP/machine-learning/venv"
+mkdir -p "$IMMICH_APP_DIR/machine-learning"
+python3 -m venv "$IMMICH_APP_DIR/machine-learning/venv"
 (
   # Initiate subshell to setup venv
   # shellcheck disable=SC1091
-  . "$APP/machine-learning/venv/bin/activate"
+  . "$IMMICH_APP_DIR/machine-learning/venv/bin/activate"
   pip3 install poetry
   cd machine-learning
   poetry install --no-root --with dev --with cpu || python3 -m pip install onnxruntime
   cd ..
 )
-cp -a machine-learning/ann machine-learning/app "$APP/machine-learning/"
+cp -a machine-learning/ann machine-learning/app "$IMMICH_APP_DIR/machine-learning/"
 
-ln -sf "$IMMICH_PATH/app/resources" "$IMMICH_PATH/"
-mkdir -p "$IMMICH_PATH/cache"
-sed -i "" -e "s|\"/cache\"|\"$IMMICH_PATH/cache\"|g" "$APP/machine-learning/app/config.py"
+ln -sf "$IMMICH_INSTALL_DIR/app/resources" "$IMMICH_INSTALL_DIR/"
+mkdir -p "$IMMICH_INSTALL_DIR/cache"
+sed -i "" -e "s|\"/cache\"|\"$IMMICH_INSTALL_DIR/cache\"|g" "$IMMICH_APP_DIR/machine-learning/app/config.py"
 npm install sharp
 
 # Install GeoNames
-cd "$IMMICH_PATH/app/resources"
+cd "$IMMICH_INSTALL_DIR/app/resources"
 wget -o - https://download.geonames.org/export/dump/admin1CodesASCII.txt &
 wget -o - https://download.geonames.org/export/dump/admin2Codes.txt &
 wget -o - https://download.geonames.org/export/dump/cities500.zip &
@@ -106,38 +106,38 @@ unzip cities500.zip
 date -Iseconds | tr -d "\n" > geodata-date.txt
 
 rm cities500.zip
-ln -s "$IMMICH_PATH/app/resources" "$IMMICH_PATH/app/geodata"
+ln -s "$IMMICH_INSTALL_DIR/app/resources" "$IMMICH_INSTALL_DIR/app/geodata"
 
 # Setup upload directory
-mkdir -p "$IMMICH_PATH/upload"
-ln -s "$IMMICH_PATH/upload" "$APP/"
-ln -s "$IMMICH_PATH/upload" "$APP/machine-learning/"
+mkdir -p "$IMMICH_INSTALL_DIR/upload"
+ln -s "$IMMICH_INSTALL_DIR/upload" "$IMMICH_APP_DIR/"
+ln -s "$IMMICH_INSTALL_DIR/upload" "$IMMICH_APP_DIR/machine-learning/"
 
 # Custom start.sh script
-cat <<EOF > "$APP/start.sh"
+cat <<EOF > "$IMMICH_APP_DIR/start.sh"
 #!/bin/sh
 
 set -eu
 
 set -a
 IMMICH_PORT="3001"
-. "$IMMICH_PATH/env"
+. "$IMMICH_INSTALL_DIR/env"
 set +a
 
-cd "$APP"
-exec node "$APP/dist/main" "\$@"
+cd "$IMMICH_APP_DIR"
+exec node "$IMMICH_APP_DIR/dist/main" "\$@"
 EOF
 
-cat <<EOF > "$APP/machine-learning/start.sh"
+cat <<EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
 #!/bin/sh
 
 set -eu
 
 set -a
-. "$IMMICH_PATH/env"
+. "$IMMICH_INSTALL_DIR/env"
 set +a
 
-cd "$APP/machine-learning"
+cd "$IMMICH_APP_DIR/machine-learning"
 . venv/bin/activate
 
 : "\${MACHINE_LEARNING_HOST:=127.0.0.1}"
@@ -154,7 +154,7 @@ exec gunicorn app.main:app \\
       --graceful-timeout 0
 EOF
 
-cat <<EOF > "$IMMICH_PATH/env"
+cat <<EOF > "$IMMICH_INSTALL_DIR/env"
 # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
 
 # Connection secret for postgres. You should change it to a random password
@@ -168,7 +168,7 @@ DB_USERNAME="immich"
 DB_DATABASE_NAME="immich"
 DB_VECTOR_EXTENSION="pgvector"
 
-IMMICH_BUILD_DATA="$IMMICH_PATH/app"
+IMMICH_BUILD_DATA="$IMMICH_INSTALL_DIR/app"
 
 # The location where your uploaded files are stored
 UPLOAD_LOCATION="./library"
@@ -183,8 +183,8 @@ IMMICH_MACHINE_LEARNING_URL="http://127.0.0.1:3003"
 REDIS_HOSTNAME="127.0.0.1"
 EOF
 
-chmod 700 "$APP/start.sh"
-chmod 700 "$APP/machine-learning/start.sh"
+chmod 700 "$IMMICH_APP_DIR/start.sh"
+chmod 700 "$IMMICH_APP_DIR/machine-learning/start.sh"
 
 # Cleanup
 rm -rf "$TMP"

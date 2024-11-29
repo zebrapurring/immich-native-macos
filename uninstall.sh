@@ -2,7 +2,9 @@
 
 set -eux
 
-IMMICH_PATH="/opt/services/immich"
+# shellcheck disable=SC1091
+. ./Scripts/config.sh
+
 REALUSER="$(whoami)"
 
 deleteUser() {
@@ -30,5 +32,5 @@ EOF
 uninstallDaemons
 deleteUser
 deletePostgresDB
-echo "INFO: deleting $IMMICH_PATH"
-rm -rf "$IMMICH_PATH"
+echo "INFO: deleting $IMMICH_INSTALL_DIR"
+rm -rf "$IMMICH_INSTALL_DIR"
