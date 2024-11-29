@@ -3,13 +3,15 @@
 set -eux
 
 # Generate database password
-DB_PASSWORD="$(uuidgen)"
-if ! grep -q "^export DB_PASSWORD=" "$(pwd)/config.sh"; then
-    echo "export DB_PASSWORD=\"$DB_PASSWORD\"" >> "$(pwd)/config.sh"
+POSTGRES_PASSWORD="$(dd if=/dev/urandom bs=1 count=100 status=none | md5 -q)"
+if ! grep -q "^POSTGRES_PASSWORD" "$(pwd)/config.env"; then
+    echo "POSTGRES_PASSWORD=\"$POSTGRES_PASSWORD\"" >> "$(pwd)/config.env"
 fi
 
+set -a
 # shellcheck disable=SC1091
-. "$(pwd)/config.sh"
+. "$(pwd)/config.env"
+set +a
 
 # Configure logging
 install_logfile="/tmp/immich-install.log"
@@ -21,7 +23,7 @@ echo "Running preinstall as $(whoami)"
 # Install dependencies
 "$(pwd)/installdependencies.sh"
 homebrew_bindir="$(su -l "$USER" -c "which brew" | xargs -I {} dirname "{}")"
-echo "export PATH=\"$homebrew_bindir:\$PATH\"" >> "$(pwd)/config.sh"
+echo "PATH=\"$homebrew_bindir:\$PATH\"" >> "$(pwd)/config.env"
 
 # Configure database
-"$(pwd)/configurepostgres.sh" "$DB_PASSWORD"
+"$(pwd)/configurepostgres.sh" "$POSTGRES_PASSWORD"

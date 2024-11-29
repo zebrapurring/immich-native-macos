@@ -4,7 +4,7 @@ set -eux
 
 echo "INFO: create user"
 
-if dscl . -list /Users/immich > /dev/null 2>&1; then
+if dscl . -list "/Users/$IMMICH_USER" > /dev/null 2>&1; then
   # User already exists
   exit
 fi
