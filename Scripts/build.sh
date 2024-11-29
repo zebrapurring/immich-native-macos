@@ -119,9 +119,8 @@ cat <<EOF > "$APP/start.sh"
 
 set -eu
 
-export IMMICH_PORT=3001
-
 set -a
+IMMICH_PORT="3001"
 . "$IMMICH_PATH/env"
 set +a
 
@@ -159,29 +158,29 @@ cat <<EOF > "$IMMICH_PATH/env"
 # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
 
 # Connection secret for postgres. You should change it to a random password
-DB_PASSWORD=$DB_PASSWORD
+DB_PASSWORD="$DB_PASSWORD"
 
 # The values below this line do not need to be changed
 ###################################################################################
-NODE_ENV=production
+NODE_ENV="production"
 
-DB_USERNAME=immich
-DB_DATABASE_NAME=immich
-DB_VECTOR_EXTENSION=pgvector
+DB_USERNAME="immich"
+DB_DATABASE_NAME="immich"
+DB_VECTOR_EXTENSION="pgvector"
 
-IMMICH_BUILD_DATA=$IMMICH_PATH/app
+IMMICH_BUILD_DATA="$IMMICH_PATH/app"
 
 # The location where your uploaded files are stored
-UPLOAD_LOCATION=./library
+UPLOAD_LOCATION="./library"
 
 # The Immich version to use. You can pin this to a specific version like "v1.71.0"
-IMMICH_VERSION=release
+IMMICH_VERSION="release"
 
 # Hosts & ports
-DB_HOSTNAME=127.0.0.1
-MACHINE_LEARNING_HOST=127.0.0.1
-IMMICH_MACHINE_LEARNING_URL=http://127.0.0.1:3003
-REDIS_HOSTNAME=127.0.0.1
+DB_HOSTNAME="127.0.0.1"
+MACHINE_LEARNING_HOST="127.0.0.1"
+IMMICH_MACHINE_LEARNING_URL="http://127.0.0.1:3003"
+REDIS_HOSTNAME="127.0.0.1"
 EOF
 
 chmod 700 "$APP/start.sh"
