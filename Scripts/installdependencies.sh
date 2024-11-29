@@ -19,12 +19,12 @@ else
     node \
     npm \
     pgvector \
-    postgresql \
+    postgresql@17 \
     python@3.11 \
     redis \
     vips \
     wget
-  brew services restart postgresql
+  brew services restart postgresql@17
   brew services restart redis
   cd -
 fi

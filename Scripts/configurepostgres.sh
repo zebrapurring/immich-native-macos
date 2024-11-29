@@ -19,7 +19,7 @@ if [ "$USER" != "$ME" ]; then
 else
   PASSWD="$1"
 
-  psql postgres << EOF
+  psql-17 postgres << EOF
 create database immich;
 create user immich with encrypted password '$PASSWD';
 grant all privileges on database immich to immich;
