@@ -1,7 +1,9 @@
 #!/bin/sh
 
-IMMICH_PATH=/opt/services/immich
-REALUSER=$(whoami)
+set -eux
+
+IMMICH_PATH="/opt/services/immich"
+REALUSER="$(whoami)"
 
 deleteUser() {
   echo "INFO: deleting user"
@@ -16,7 +18,7 @@ uninstallDaemons() {
   rm -f /Library/LaunchDaemons/com.immich*plist
 }
 
-deletePostgresUser() {
+deletePostgresDB() {
   echo "INFO: deleting PostgreSQL immich user and database"
   sudo -u "$REALUSER" psql-17 postgres << EOF
 drop database immich;
@@ -27,6 +29,6 @@ EOF
 
 uninstallDaemons
 deleteUser
-deletePostgresUser
+deletePostgresDB
 echo "INFO: deleting $IMMICH_PATH"
-rm -rf $IMMICH_PATH
+rm -rf "$IMMICH_PATH"
