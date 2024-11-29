@@ -58,6 +58,7 @@ cd -
 echo "INFO: copying to destination directory"
 rm -rf "$IMMICH_APP_DIR"
 mkdir -p "$IMMICH_APP_DIR"
+echo "{}" > "$IMMICH_APP_DIR/build-lock.json"
 cp -a server/node_modules server/dist server/bin "$IMMICH_APP_DIR/"
 cp -a web/build "$IMMICH_APP_DIR/www"
 cp -a server/resources server/package.json server/package-lock.json "$IMMICH_APP_DIR/"
