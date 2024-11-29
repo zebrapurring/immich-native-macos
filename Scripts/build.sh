@@ -11,6 +11,7 @@ if [ -z "$TAG" ]; then
 fi
 
 TMP="$(mktemp -d -t immich -p /tmp)"
+chmod 755 "$TMP"
 
 if [ "$USER" != "immich" ]; then
   echo "DEBUG: going to switch to immich user"
