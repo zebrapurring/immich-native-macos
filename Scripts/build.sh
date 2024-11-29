@@ -15,27 +15,20 @@ chmod 755 "$TMP"
 
 if [ "$USER" != "immich" ]; then
   echo "DEBUG: going to switch to immich user"
-  rm -rf "${IMMICH_PATH:?}/home" 2> /dev/null
-  mkdir -p "$IMMICH_PATH/home"
-  chown immich:immich "$IMMICH_PATH/home"
 
   # move to a place were immich has permission
   echo "DEBUG: copying scripts to accessible location"
   cp "$0" "config.sh" "$TMP"
 
   script="$TMP/$(basename "$0")"
-  chown immich:immich "$script"
+  chown "$IMMICH_USER:$IMMICH_GROUP" "$script"
   sudo -u immich "$script" "$@"
   exit
 fi
 
 echo "INFO: building immich"
 
-export HOME="$IMMICH_PATH/home"
-
 umask 077
-
-echo 'umask 077' > "$HOME/.bashrc"
 
 echo "INFO: cloning immich repo"
 git clone --depth 1 --branch "$TAG" https://github.com/immich-app/immich "$TMP"

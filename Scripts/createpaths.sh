@@ -12,10 +12,7 @@ if [ -z "$TAG" ]; then
   exit 1
 fi
 
-# IMMICH_PATH=/opt/services/immich
-# BASEDIR="$(dirname "$0")"
-
 mkdir -p "$IMMICH_PATH"
-chown -R immich:immich "$IMMICH_PATH"
+chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_PATH"
 mkdir -p /var/log/immich
-chown -R immich:immich /var/log/immich
+chown -R "$IMMICH_USER:$IMMICH_GROUP" /var/log/immich
