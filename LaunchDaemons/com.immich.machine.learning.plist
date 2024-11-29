@@ -10,7 +10,7 @@
 		<string>immich</string>
 		<key>ProgramArguments</key>
 		<array>
-			<string>/opt/services/immich/app/machine-learning/start.sh</string>
+			<string>/opt/immich/app/machine-learning/start.sh</string>
 		</array>
 		<key>EnvironmentVariables</key>
 		<dict>
