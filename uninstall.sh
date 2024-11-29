@@ -36,9 +36,9 @@ case "$yn" in
   *) exit;;
 esac
 
+delete_postgres_db
 uninstall_daemons
 delete_user
-delete_postgres_db
 
 echo "INFO: deleting $IMMICH_INSTALL_DIR"
 rm -rf "$IMMICH_INSTALL_DIR"
