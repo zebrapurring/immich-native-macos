@@ -9,6 +9,6 @@ install_logfile="/tmp/immich-install.log"
 {
     ./createuser.sh
     ./createpaths.sh
-    ./build.sh "$PASSWORD"
+    ./build.sh "$DB_PASSWORD"
     ./installdaemons.sh
 } 2>&1 | tee -a "$install_logfile"

@@ -10,7 +10,6 @@ if [ -z "$TAG" ]; then
   exit 1
 fi
 
-PASSWD="$1"
 TMP="$(mktemp -d -t immich -p /tmp)"
 
 if [ "$USER" != "immich" ]; then
@@ -167,7 +166,7 @@ cat <<EOF > "$IMMICH_PATH/env"
 # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
 
 # Connection secret for postgres. You should change it to a random password
-DB_PASSWORD=$PASSWD
+DB_PASSWORD=$DB_PASSWORD
 
 # The values below this line do not need to be changed
 ###################################################################################
