@@ -7,15 +7,15 @@ set -eux
 
 delete_user() {
   echo "INFO: deleting user"
-  dscl . -delete "/Users/immich" && \
-  dscl . -delete "/Groups/immich"
+  sudo dscl . -delete "/Groups/$IMMICH_GROUP"
+  sudo dscl . -delete "/Users/$IMMICH_USER"
 }
 
 uninstall_daemons() {
   echo "INFO: uninstalling daemons"
-  launchctl bootout system /Library/LaunchDaemons/com.immich.machine.learning.plist
-  launchctl bootout system /Library/LaunchDaemons/com.immich.plist
-  rm -f /Library/LaunchDaemons/com.immich*plist
+  sudo launchctl bootout system /Library/LaunchDaemons/com.immich.machine.learning.plist
+  sudo launchctl bootout system /Library/LaunchDaemons/com.immich.plist
+  sudo rm -f /Library/LaunchDaemons/com.immich*plist
 }
 
 delete_postgres_db() {
@@ -34,8 +34,8 @@ case "$yn" in
   *) exit;;
 esac
 
-delete_postgres_db
 uninstall_daemons
+delete_postgres_db
 delete_user
 
 echo "INFO: deleting $IMMICH_INSTALL_DIR"
