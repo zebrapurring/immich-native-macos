@@ -11,8 +11,8 @@ deleteUser() {
 
 uninstallDaemons() {
   echo "INFO: uninstalling daemons"
-  launchctl unload -w /Library/LaunchDaemons/com.immich.machine.learning.plist
-  launchctl unload -w /Library/LaunchDaemons/com.immich.plist
+  launchctl bootout system /Library/LaunchDaemons/com.immich.machine.learning.plist
+  launchctl bootout system /Library/LaunchDaemons/com.immich.plist
   rm -f /Library/LaunchDaemons/com.immich*plist
 }
 
