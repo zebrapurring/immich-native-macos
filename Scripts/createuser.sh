@@ -11,10 +11,9 @@ if [ -z "$TAG" ]; then
   exit 1
 fi
 
-IMMICH_HOME="${IMMICH_PATH:?}/home"
 mkdir -p "$IMMICH_HOME"
 echo "umask 077" > "$IMMICH_HOME/.bashrc"
-chown -R immich:immich "$IMMICH_HOME"
+chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_HOME"
 
 if dscl . -list /Users/immich > /dev/null 2>&1; then
   # User already exists
@@ -22,19 +21,19 @@ if dscl . -list /Users/immich > /dev/null 2>&1; then
 fi
 
 # Create group
-dscl . -create /Groups/immich
-dscl . -create /Groups/immich RealName immich
-dscl . -create /Groups/immich passwd "*"
-dscl . -create /Groups/immich gid 9999
+dscl . -create "/Groups/$IMMICH_GROUP"
+dscl . -create "/Groups/$IMMICH_GROUP" RealName "Immich headless user"
+dscl . -create "/Groups/$IMMICH_GROUP" passwd "*"
+dscl . -create "/Groups/$IMMICH_GROUP" gid 9999
 
 # Create user
-dscl . -create /Users/immich
-dscl . -create /Users/immich UserShell /sbin/nologin
-dscl . -create /Users/immich RealName immich
-dscl . -create /Users/immich UniqueID 9999
-dscl . -create /Users/immich PrimaryGroupID 9999
-dscl . -create /Users/immich NFSHomeDirectory "$IMMICH_HOME"
-dscl . -create /Users/immich passwd "*"
+dscl . -create "/Users/$IMMICH_USER"
+dscl . -create "/Users/$IMMICH_USER" UserShell /sbin/nologin
+dscl . -create "/Users/$IMMICH_USER" RealName "Immich headless user"
+dscl . -create "/Users/$IMMICH_USER" UniqueID 9999
+dscl . -create "/Users/$IMMICH_USER" PrimaryGroupID 9999
+dscl . -create "/Users/$IMMICH_USER" NFSHomeDirectory "$IMMICH_HOME"
+dscl . -create "/Users/$IMMICH_USER" passwd "*"
 
 # Add user to group
-dscl . -create /Groups/immich GroupMembership immich
+dscl . -create "/Groups/$IMMICH_GROUP" GroupMembership "$IMMICH_USER"

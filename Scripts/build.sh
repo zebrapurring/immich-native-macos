@@ -21,7 +21,7 @@ if [ "$USER" != "immich" ]; then
   cp "$0" "config.sh" "$TMP"
 
   script="$TMP/$(basename "$0")"
-  chown immich:immich "$script"
+  chown "$IMMICH_USER:$IMMICH_GROUP" "$script"
   sudo -u immich "$script" "$@"
   exit
 fi
