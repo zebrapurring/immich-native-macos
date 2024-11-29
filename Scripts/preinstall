@@ -3,14 +3,14 @@
 set -eu
 
 PASSWORD=$(date +%s)
-echo "export PASSWORD=\"$PASSWORD\"" >> "$(pwd)/config.sh"
+echo "export PASSWORD=\"$PASSWORD\"" >> "./config.sh"
 
 # shellcheck disable=SC1091
-. "$(pwd)/config.sh"
+. "./config.sh"
 
 install_logfile="/tmp/immich-install.log"
-sh "$(pwd)/createlog.sh" "$install_logfile"
+sh "./createlog.sh" "$install_logfile"
 {
-    sh "$(pwd)/installdependencies.sh"
-    sh "$(pwd)/configurepostgres.sh" "$PASSWORD"
+    sh "./installdependencies.sh"
+    sh "./configurepostgres.sh" "$PASSWORD"
 } >> "$install_logfile" 2>&1

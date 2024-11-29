@@ -3,12 +3,12 @@
 set -eu
 
 # shellcheck disable=SC1091
-. "$(pwd)/config.sh"
+. "./config.sh"
 
 install_logfile="/tmp/immich-install.log"
 {
-    sh "$(pwd)/createuser.sh"
-    sh "$(pwd)/createpaths.sh"
-    sh "$(pwd)/build.sh" "$PASSWORD"
-    sh "$(pwd)/installdaemons.sh"
+    sh "./createuser.sh"
+    sh "./createpaths.sh"
+    sh "./build.sh" "$PASSWORD"
+    sh "./installdaemons.sh"
 } >> "$install_logfile" 2>&1
