@@ -75,7 +75,7 @@ cd "$APP"
 # be used in other places
 ln -sf resources/* .
 npm cache clean --force
-npm install --os=darwin --cpu=x64 sharp
+npm install --os=darwin --cpu=arm64 sharp
 cd -
 
 echo "INFO building machine learning"
