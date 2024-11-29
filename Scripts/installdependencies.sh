@@ -14,7 +14,16 @@ else
   [ -z "$(which brew)" ] && echo "Brew is not installed" && exit 1
 
   cd /tmp/
-  brew install postgresql pgvector node redis ffmpeg vips wget npm python@3.11
+  brew install \
+    ffmpeg \
+    node \
+    npm \
+    pgvector \
+    postgresql \
+    python@3.11 \
+    redis \
+    vips \
+    wget
   brew services restart postgresql
   brew services restart redis
   cd -
