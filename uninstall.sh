@@ -39,4 +39,4 @@ delete_postgres_db
 delete_user
 
 echo "INFO: deleting $IMMICH_INSTALL_DIR"
-rm -rf "$IMMICH_INSTALL_DIR"
+sudo rm -rf "$IMMICH_INSTALL_DIR"
