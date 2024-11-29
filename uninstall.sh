@@ -1,7 +1,7 @@
 #!/bin/sh
 
-IMMICH_PATH=/opt/services/immich
-REALUSER=$(whoami)
+IMMICH_PATH="/opt/services/immich"
+REALUSER="$(whoami)"
 
 deleteUser() {
   echo "INFO: deleting user"
@@ -29,4 +29,4 @@ uninstallDaemons
 deleteUser
 deletePostgresDB
 echo "INFO: deleting $IMMICH_PATH"
-rm -rf $IMMICH_PATH
+rm -rf "$IMMICH_PATH"
