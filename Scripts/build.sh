@@ -125,28 +125,28 @@ cat <<EOF > "$APP/start.sh"
 #!/bin/bash
 
 export IMMICH_PORT=3001
-export HOME=$IMMICH_PATH/home
-export PATH=\$PATH:/usr/local/bin
+export HOME="$IMMICH_PATH/home"
+export PATH="\$PATH:/usr/local/bin"
 
 set -a
-. $IMMICH_PATH/env
+. "$IMMICH_PATH/env"
 set +a
 
-cd $APP
-exec node $APP/dist/main "\$@"
+cd "$APP"
+exec node "$APP/dist/main" "\$@"
 EOF
 
 cat <<EOF > "$APP/machine-learning/start.sh"
 #!/bin/bash
 
-export HOME=$IMMICH_PATH/home
-export PATH=\$PATH:/usr/local/bin
+export HOME="$IMMICH_PATH/home"
+export PATH="\$PATH:/usr/local/bin"
 
 set -a
-. $IMMICH_PATH/env
+. "$IMMICH_PATH/env"
 set +a
 
-cd $APP/machine-learning
+cd "$APP/machine-learning"
 . venv/bin/activate
 
 : "\${MACHINE_LEARNING_HOST:=127.0.0.1}"
@@ -157,7 +157,7 @@ cd $APP/machine-learning
 exec gunicorn app.main:app \
       -k app.config.CustomUvicornWorker \
       -w "\$MACHINE_LEARNING_WORKERS" \
-      -b "\$MACHINE_LEARNING_HOST":"\$MACHINE_LEARNING_PORT" \
+      -b "\$MACHINE_LEARNING_HOST:\$MACHINE_LEARNING_PORT" \
       -t "\$MACHINE_LEARNING_WORKER_TIMEOUT" \
       --log-config-json log_conf.json \
       --graceful-timeout 0
