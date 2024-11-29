@@ -9,8 +9,6 @@ if [ "$USER" != "$ME" ]; then
 else
   echo "INFO:  install dependencies"
 
-  export PATH="/usr/local/bin:$PATH"
-
   [ -z "$(which brew)" ] && echo "Brew is not installed" && exit 1
 
   cd /tmp/
