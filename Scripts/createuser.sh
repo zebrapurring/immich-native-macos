@@ -4,9 +4,9 @@ set -eux
 
 echo "INFO: create user"
 
-mkdir -p "$IMMICH_HOME"
-echo "umask 077" > "$IMMICH_HOME/.bashrc"
-chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_HOME"
+mkdir -p "$IMMICH_HOME_DIR"
+echo "umask 077" > "$IMMICH_HOME_DIR/.bashrc"
+chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_HOME_DIR"
 
 if dscl . -list /Users/immich > /dev/null 2>&1; then
   # User already exists
@@ -25,7 +25,7 @@ dscl . -create "/Users/$IMMICH_USER" UserShell /sbin/nologin
 dscl . -create "/Users/$IMMICH_USER" RealName "Immich headless user"
 dscl . -create "/Users/$IMMICH_USER" UniqueID 9999
 dscl . -create "/Users/$IMMICH_USER" PrimaryGroupID 9999
-dscl . -create "/Users/$IMMICH_USER" NFSHomeDirectory "$IMMICH_HOME"
+dscl . -create "/Users/$IMMICH_USER" NFSHomeDirectory "$IMMICH_HOME_DIR"
 dscl . -create "/Users/$IMMICH_USER" passwd "*"
 
 # Add user to group
