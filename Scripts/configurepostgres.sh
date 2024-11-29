@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -eux
 
 echo "INFO: configure postgresql"
 

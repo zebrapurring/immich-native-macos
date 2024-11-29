@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -eux
 
 # shellcheck disable=SC1091
 . ./Scripts/config.sh

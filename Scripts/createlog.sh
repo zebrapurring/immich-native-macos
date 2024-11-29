@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -eux
 
 install_logfile="$1"
 rm -f "$install_logfile"
