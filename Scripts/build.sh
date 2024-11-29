@@ -28,8 +28,6 @@ fi
 
 echo "INFO: building immich"
 
-umask 077
-
 # Clone the remote repository
 echo "INFO: cloning immich repo"
 git clone --depth 1 --branch "$TAG" https://github.com/immich-app/immich "$TMP"
