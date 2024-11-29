@@ -118,8 +118,6 @@ cat <<EOF > "$APP/start.sh"
 #!/bin/bash
 
 export IMMICH_PORT=3001
-export HOME="$IMMICH_PATH/home"
-export PATH="\$PATH:/usr/local/bin"
 
 set -a
 . "$IMMICH_PATH/env"
@@ -131,9 +129,6 @@ EOF
 
 cat <<EOF > "$APP/machine-learning/start.sh"
 #!/bin/bash
-
-export HOME="$IMMICH_PATH/home"
-export PATH="\$PATH:/usr/local/bin"
 
 set -a
 . "$IMMICH_PATH/env"
