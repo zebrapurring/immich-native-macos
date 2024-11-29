@@ -4,15 +4,15 @@ set -eu
 
 PASSWORD="$(uuidgen)"
 if ! grep -q "^export PASSWORD=" ./config.sh; then
-    echo "export PASSWORD=\"$PASSWORD\"" >> "./config.sh"
+    echo "export PASSWORD=\"$PASSWORD\"" >> ./config.sh
 fi
 
 # shellcheck disable=SC1091
-. "./config.sh"
+. ./config.sh
 
 install_logfile="/tmp/immich-install.log"
-sh "./createlog.sh" "$install_logfile"
+./createlog.sh "$install_logfile"
 {
-    sh "./installdependencies.sh"
-    sh "./configurepostgres.sh" "$PASSWORD"
+    ./installdependencies.sh
+    ./configurepostgres.sh "$PASSWORD"
 } 2>&1 | tee -a "$install_logfile"

@@ -3,12 +3,12 @@
 set -eu
 
 # shellcheck disable=SC1091
-. "./config.sh"
+. ./config.sh
 
 install_logfile="/tmp/immich-install.log"
 {
-    sh "./createuser.sh"
-    sh "./createpaths.sh"
-    sh "./build.sh" "$PASSWORD"
-    sh "./installdaemons.sh"
+    ./createuser.sh
+    ./createpaths.sh
+    ./build.sh "$PASSWORD"
+    ./installdaemons.sh
 } 2>&1 | tee -a "$install_logfile"
