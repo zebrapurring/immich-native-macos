@@ -14,5 +14,9 @@
 		<array>
 			<string>/opt/services/immich/app/machine-learning/start.sh</string>
 		</array>
+		<key>StandardOutPath</key>
+  		<string>/var/log/immich/immich-machine-learning.log</string>
+		<key>StandardErrorPath</key>
+  		<string>/var/log/immich/immich-machine-learning.log</string>
 	</dict>
 </plist>

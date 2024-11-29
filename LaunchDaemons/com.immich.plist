@@ -14,5 +14,9 @@
 		<array>
 			<string>/opt/services/immich/app/start.sh</string>
 		</array>
+		<key>StandardOutPath</key>
+  		<string>/var/log/immich/immich-app.log</string>
+		<key>StandardErrorPath</key>
+  		<string>/var/log/immich/immich-app.log</string>
 	</dict>
 </plist>
