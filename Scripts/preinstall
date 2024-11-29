@@ -2,6 +2,8 @@
 
 set -eux
 
+cd "$(pwd)"
+
 DB_PASSWORD="$(uuidgen)"
 if ! grep -q "^export DB_PASSWORD=" ./config.sh; then
     echo "export DB_PASSWORD=\"$DB_PASSWORD\"" >> ./config.sh
