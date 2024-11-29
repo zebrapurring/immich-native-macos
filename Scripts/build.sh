@@ -37,10 +37,8 @@ umask 077
 echo 'umask 077' > "$HOME/.bashrc"
 
 echo "INFO: cloning immich repo"
-TMP="/tmp/immich-$(uuidgen)"
-git clone https://github.com/immich-app/immich "$TMP"
+git clone --depth 1 --branch "$TAG" https://github.com/immich-app/immich "$TMP"
 cd "$TMP"
-git reset --hard "$TAG"
 
 echo "INFO: building the server"
 cd server
