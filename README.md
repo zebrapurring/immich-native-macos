@@ -6,7 +6,7 @@ If you want to install immich natively on linux, visit [arter97's repo](https://
 
  * This is tested on macOS Monterey and Sonoma (x86).
 
- * This installer will install Immich to `/opt/services/immich`.
+ * This installer will install Immich to `/opt/immich`.
 
  * The installer currently is using Immich v1.121.0 It should be noted that due to the fast-evolving nature of Immich, the install script may get broken if you replace the `$TAG` to something more recent.
 
