@@ -1,7 +1,7 @@
 #!/bin/sh
 
 IMMICH_PATH=/opt/services/immich
-REALUSER=$(who am i | cut -f 1 -d ' ')
+REALUSER=$(whoami)
 
 deleteUser() {
   echo "INFO: deleting user"
