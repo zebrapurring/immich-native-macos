@@ -13,4 +13,4 @@ sh "./createlog.sh" "$install_logfile"
 {
     sh "./installdependencies.sh"
     sh "./configurepostgres.sh" "$PASSWORD"
-} >> "$install_logfile" 2>&1
+} 2>&1 | tee -a "$install_logfile"

@@ -11,4 +11,4 @@ install_logfile="/tmp/immich-install.log"
     sh "./createpaths.sh"
     sh "./build.sh" "$PASSWORD"
     sh "./installdaemons.sh"
-} >> "$install_logfile" 2>&1
+} 2>&1 | tee -a "$install_logfile"
