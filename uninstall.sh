@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eux
+
 IMMICH_PATH="/opt/services/immich"
 REALUSER="$(whoami)"
 
