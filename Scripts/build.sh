@@ -11,6 +11,7 @@ if [ -z "$TAG" ]; then
 fi
 
 PASSWD="$1"
+TMP="$(mktemp -d -t immich -p /tmp)"
 
 if [ "$USER" != "immich" ]; then
   echo "DEBUG: going to switch to immich user"
@@ -20,9 +21,9 @@ if [ "$USER" != "immich" ]; then
 
   # move to a place were immich has permission
   echo "DEBUG: copying scripts to accessible location"
-  cp "$0" "config.sh" /tmp/
+  cp "$0" "config.sh" "$TMP"
 
-  script="/tmp/$(basename "$0")"
+  script="$TMP/$(basename "$0")"
   chown immich:immich "$script"
   sudo -u immich "$script" "$@" 2>&1 || exit 1
   exit
@@ -195,4 +196,4 @@ chmod 700 "$APP/start.sh"
 chmod 700 "$APP/machine-learning/start.sh"
 
 # Cleanup
-rm -rf "$TMP" "/tmp/$(basename "$0")"
+rm -rf "$TMP"
