@@ -9,7 +9,7 @@ echo "export PASSWORD=\"$PASSWORD\"" >> "$(pwd)/config.sh"
 . "$(pwd)/config.sh"
 
 install_logfile="/tmp/immich-install.log"
-sh "$(pwd)/createlog.sh"
+sh "$(pwd)/createlog.sh" "$install_logfile"
 {
     sh "$(pwd)/installdependencies.sh"
     sh "$(pwd)/configurepostgres.sh" "$PASSWORD"
