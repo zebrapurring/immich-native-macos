@@ -2,15 +2,23 @@
 
 set -eux
 
-cd "$(pwd)"
-
 # shellcheck disable=SC1091
-. ./config.sh
+. "$(pwd)/config.sh"
 
+# Configure logging
 install_logfile="/tmp/immich-install.log"
-{
-    ./createuser.sh
-    ./createpaths.sh
-    ./build.sh
-    ./installdaemons.sh
-} 2>&1 | tee -a "$install_logfile"
+exec >> "$install_logfile" 2>&1
+
+echo "Running postinstall as $(whoami)"
+
+# Create immich user
+"$(pwd)/createuser.sh"
+
+# Create required directories
+"$(pwd)/createpaths.sh"
+
+# Build Immich application
+"$(pwd)/build.sh"
+
+# Install Launchd daemons
+"$(pwd)/installdaemons.sh"

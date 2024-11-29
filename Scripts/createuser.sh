@@ -4,20 +4,13 @@ set -eux
 
 echo "INFO: create user"
 
-# shellcheck disable=SC1091
-. ./config.sh
-if [ -z "$TAG" ]; then
-  echo "DEBUG: config not working"
-  exit 1
-fi
-
 mkdir -p "$IMMICH_HOME"
 echo "umask 077" > "$IMMICH_HOME/.bashrc"
 chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_HOME"
 
 if dscl . -list /Users/immich > /dev/null 2>&1; then
   # User already exists
-  exit 0
+  exit
 fi
 
 # Create group

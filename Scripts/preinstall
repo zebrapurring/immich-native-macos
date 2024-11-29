@@ -2,19 +2,26 @@
 
 set -eux
 
-cd "$(pwd)"
-
+# Generate database password
 DB_PASSWORD="$(uuidgen)"
-if ! grep -q "^export DB_PASSWORD=" ./config.sh; then
-    echo "export DB_PASSWORD=\"$DB_PASSWORD\"" >> ./config.sh
+if ! grep -q "^export DB_PASSWORD=" "$(pwd)/config.sh"; then
+    echo "export DB_PASSWORD=\"$DB_PASSWORD\"" >> "$(pwd)/config.sh"
 fi
 
 # shellcheck disable=SC1091
-. ./config.sh
+. "$(pwd)/config.sh"
 
+# Configure logging
 install_logfile="/tmp/immich-install.log"
-./createlog.sh "$install_logfile"
-{
-    ./installdependencies.sh
-    ./configurepostgres.sh "$DB_PASSWORD"
-} 2>&1 | tee -a "$install_logfile"
+"$(pwd)/createlog.sh" "$install_logfile"
+exec >> "$install_logfile" 2>&1
+
+echo "Running preinstall as $(whoami)"
+
+# Install dependencies
+"$(pwd)/installdependencies.sh"
+homebrew_bindir="$(su -l "$USER" -c "which brew" | xargs -I {} dirname "{}")"
+echo "export PATH=\"$homebrew_bindir:\$PATH\"" >> "$(pwd)/config.sh"
+
+# Configure database
+"$(pwd)/configurepostgres.sh" "$DB_PASSWORD"

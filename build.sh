@@ -5,11 +5,7 @@ set -eux
 # shellcheck disable=SC1091
 . ./Scripts/config.sh
 
-if [ -z "$TAG" ]; then
-  echo "DEBUG: config not working"
-  exit 1
-fi
-
+rm -rf "dist/$TAG"
 mkdir -p "dist/$TAG"
 pkgbuild \
   --version "$TAG" \
