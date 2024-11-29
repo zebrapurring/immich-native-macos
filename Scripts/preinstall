@@ -1,11 +1,16 @@
 #!/bin/sh
 
+set -eu
+
 PASSWORD=$(date +%s)
-echo "export PASSWORD=$PASSWORD" >> $(pwd)/config.sh || exit 
+echo "export PASSWORD=\"$PASSWORD\"" >> "$(pwd)/config.sh"
 
-. $(pwd)/config.sh || exit
+# shellcheck disable=SC1091
+. "$(pwd)/config.sh"
 
-sh $(pwd)/createlog.sh || exit 1
-sh $(pwd)/installdependencies.sh >> /tmp/immich-install.log 2>&1 || exit 1
-sh $(pwd)/configurepostgres.sh $PASSWORD >> /tmp/immich-install.log 2>&1 || exit 1
-
+install_logfile="/tmp/immich-install.log"
+sh "$(pwd)/createlog.sh"
+{
+    sh "$(pwd)/installdependencies.sh"
+    sh "$(pwd)/configurepostgres.sh" "$PASSWORD"
+} >> "$install_logfile" 2>&1

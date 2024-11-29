@@ -1,7 +1,10 @@
 #!/bin/sh
 
+set -eu
+
 echo "INFO: create paths"
 
+# shellcheck disable=SC1091
 . ./config.sh || exit 1
 
 if [ -z "$TAG" ]; then
@@ -12,7 +15,7 @@ fi
 # IMMICH_PATH=/opt/services/immich
 # BASEDIR="$(dirname "$0")"
 
-mkdir -p $IMMICH_PATH
-chown -R immich:immich $IMMICH_PATH
+mkdir -p "$IMMICH_PATH"
+chown -R immich:immich "$IMMICH_PATH"
 mkdir -p /var/log/immich
 chown -R immich:immich /var/log/immich

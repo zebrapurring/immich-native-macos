@@ -1,7 +1,10 @@
 #!/bin/sh
 
+set -eu
+
 echo "INFO: configure postgresql"
 
+# shellcheck disable=SC1091
 . ./config.sh || exit 1
 
 if [ -z "$TAG" ]; then
@@ -12,7 +15,7 @@ fi
 ME=$(whoami)
 
 if [ "$USER" != "$ME" ]; then
-  sudo -u $USER "$0" $* || exit 1
+  sudo -u "$USER" "$0" "$@" || exit 1
 else
   PASSWD=$1
   [ -z "$PASSWD" ] && exit 1

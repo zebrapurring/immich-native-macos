@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 echo "INFO:  install daemons"
 
 # blindly try to unload
