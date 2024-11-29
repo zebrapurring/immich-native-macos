@@ -2,27 +2,27 @@
 
 set -eux
 
-# shellcheck disable=SC1091
-. ./config.sh
-
-if [ -z "$TAG" ]; then
-  echo "DEBUG: config not working"
-  exit 1
-fi
-
 TMP="$(mktemp -d -t immich -p /tmp)"
 chmod 755 "$TMP"
 
-if [ "$USER" != "immich" ]; then
+if [ -z "${IMMICH_USER:-}" ]; then
+  # Load configuration when running as immich user with `sudo`
+  # shellcheck disable=SC1091
+  . "$(dirname "$0")/config.sh"
+  export HOME="$IMMICH_HOME"
+fi
+
+if [ "$USER" != "$IMMICH_USER" ]; then
   echo "DEBUG: going to switch to immich user"
 
   # move to a place were immich has permission
   echo "DEBUG: copying scripts to accessible location"
-  cp "$0" "config.sh" "$TMP"
-
   script="$TMP/$(basename "$0")"
-  chown "$IMMICH_USER:$IMMICH_GROUP" "$script"
-  sudo -u immich "$script" "$@"
+  cp "$0" "config.sh" "$TMP"
+  chown -R "$IMMICH_USER:$IMMICH_GROUP" "$TMP"
+
+  # Re-run as immich user
+  sudo -u "$IMMICH_USER" -- "$script"
   exit
 fi
 
@@ -87,7 +87,7 @@ python3 -m venv "$APP/machine-learning/venv"
   poetry install --no-root --with dev --with cpu || python3 -m pip install onnxruntime
   cd ..
 )
-cp -a machine-learning/ann machine-learning/app $APP/machine-learning/
+cp -a machine-learning/ann machine-learning/app "$APP/machine-learning/"
 
 ln -sf "$IMMICH_PATH/app/resources" "$IMMICH_PATH/"
 mkdir -p "$IMMICH_PATH/cache"

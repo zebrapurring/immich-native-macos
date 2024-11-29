@@ -20,7 +20,7 @@ uninstallDaemons() {
 
 deletePostgresDB() {
   echo "INFO: deleting PostgreSQL immich user and database"
-  sudo -u "$REALUSER" psql-17 postgres << EOF
+  sudo -E -u "$REALUSER" psql-17 postgres << EOF
 drop database immich;
 drop user immich;
 EOF
