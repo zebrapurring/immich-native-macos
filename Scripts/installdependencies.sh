@@ -5,7 +5,7 @@ set -eu
 ME=$(whoami)
 
 if [ "$USER" != "$ME" ]; then
-  su -l "$USER" -c "$0" "$@" || exit 1
+  su -l "$USER" -c "$0" "$@"
 else
   echo "INFO:  install dependencies"
 

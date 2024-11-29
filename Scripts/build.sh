@@ -3,7 +3,7 @@
 set -eu
 
 # shellcheck disable=SC1091
-. ./config.sh || exit 1
+. ./config.sh
 
 if [ -z "$TAG" ]; then
   echo "DEBUG: config not working"
@@ -25,7 +25,7 @@ if [ "$USER" != "immich" ]; then
 
   script="$TMP/$(basename "$0")"
   chown immich:immich "$script"
-  sudo -u immich "$script" "$@" 2>&1 || exit 1
+  sudo -u immich "$script" "$@"
   exit
 fi
 
