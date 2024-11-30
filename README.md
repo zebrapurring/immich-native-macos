@@ -1,70 +1,56 @@
-# Unofficial Immich Installer
+# Native Immich installer for macOS
 
-If you want to install immich natively on linux, visit [arter97's repo](https://github.com/arter97/immich-native) for instructions and scripts to install immich on linux.
+This repository provides a set of scripts that can be used to generate an unofficial package containing the prebuilt native Immich release for macOS.
 
-### Notes
+The following steps are performed by the installer:
 
- * This is tested on macOS Monterey and Sonoma (x86).
+* Install dependencies with Homebrew (see [installdependencies.sh](./Scripts/installdependencies.sh))
+* Create headless user `immich`
+* Create PostgreSQL database `immich` and user `immich`
+* Copy the Immich installation to `/opt/immich/share`
+* Create Immich configuration in `/opt/immich/etc/immich_server.env`
+* Create Launchd job configurations for Immich and the Machine Learning microservice in `/Library/LaunchDaemons`
 
- * This installer will install Immich to `/opt/immich`.
+## Notes
 
- * The installer currently is using Immich v1.121.0 It should be noted that due to the fast-evolving nature of Immich, the install script may get broken if you replace the `$TAG` to something more recent.
+* Tested on macOS Sequoia with Apple Silicon
+* Uses `pgvector` is used instead of `pgvecto.rs` to remove an additional Rust build dependency
+* By default Immich listens to `0.0.0.0:2283` and the Machine Learning microservice listens to `0.0.0.0:3001`
+* JPEG XL support may differ official Immich due to base-image's dependency differences
 
- * `pgvector` is used instead of `pgvecto.rs` that the official Immich uses to remove an additional Rust build dependency.
+## Building the installer from source
 
- * Microservice and machine-learning's host is opened to 0.0.0.0 in the default configuration. This behavior is changed to only accept 127.0.0.1 during installation. Only the main Immich service's port, 3001, is opened to 0.0.0.0.
-
- * Only the basic CPU configuration is used. Hardware-acceleration such as CUDA is unsupported. In my personal experience, importing about 10K photos on a x86 processor doesn't take an unreasonable amount of time (less than 30 minutes).
-
- * JPEG XL support may differ official Immich due to base-image's dependency differences.
-
-## 1. Install brew
-
-The installer will install all dependencies as long as brew is installed
-See [brew.sh](https://brew.sh) for details about brew
-
-``` bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-## 2. Installing
-
-Download the pkg file (from releases) and install it. The installer requires administrator privileges.
-
-The things that the installer does as root:
-- create the immich user
-- install the LaunchDaemon scripts
-- create the immich directories with appropriate permissions
-- runs the install script as the immich user
-
-### Building the package from source
-
-run the build.sh script to create a pkg file.
-
-```bash
-./build.sh
-```
-
-## Done!
-
-Your Immich installation should be running at 3001 port, listening from localhost (127.0.0.1).
-
-Immich will additionally use localhost's 3002 and 3003 ports.
-
-Please add firewall rules and apply https proxy and secure your Immich instance.
+1. Install [Homebrew](https://brew.sh)
+    ```sh
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+2. Install build dependencies
+    ```sh
+    brew install \
+        node \
+        npm \
+        python@3.11 \
+        vips
+    ```
+3. Build the package
+    ```sh
+    ./build_pkg.sh
+    ```
 
 ## Uninstallation
 
-Uninstallation is now done by executing the uninstall.sh script as root
-The script will:
-- stop immich from running
-- delete the LaunchDaemon scripts
-- delete the immich user and group
-- delete the database user AND DATABASE
-- delete the immich directories
+The installation can be removed by running the [uninstall.sh](./uninstall.sh) script as a regular user.
 
-WARNING: running the uninstall script will remove everything that was uploaded to immich
+Note that this will remove:
 
-``` bash
-sudo sh ./uninstall.sh
-```
+* The Launchd jobs
+* The local `immich` user and group
+* The Immich database and the PostgreSQL `immich` user
+* The Immich installation directory, including the media directory
+
+## References
+
+For running Immich natively on other platforms, you can check out:
+
+* Linux - [arter97's repo](https://github.com/arter97/immich-native)
+* FreeBSD - [zebrapurring's IOCage plugin repo](https://github.com/zebrapurring/iocage-plugin-immich)
