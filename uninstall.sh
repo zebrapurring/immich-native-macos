@@ -3,7 +3,7 @@
 set -eux
 
 # shellcheck disable=SC1091
-. ./Scripts/config.sh
+. Scripts/config.env
 
 delete_user() {
   echo "INFO: deleting user"

@@ -13,8 +13,8 @@ fi
 DB_PASSWORD="$1"
 
 psql-17 postgres << EOF
-create database immich;
-create user immich with encrypted password '$DB_PASSWORD';
-grant all privileges on database immich to immich;
+CREATE DATABASE immich;
+CREATE USER immich WITH ENCRYPTED PASSWORD '$DB_PASSWORD';
+GRANT ALL PRIVILEGES ON DATABASE immich TO immich;
 ALTER USER immich WITH SUPERUSER;
 EOF

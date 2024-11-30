@@ -7,10 +7,10 @@
 		<key>RunAtLoad</key>
 		<true/>
 		<key>UserName</key>
-		<string>immich</string>
+		<string>${IMMICH_USER}</string>
 		<key>ProgramArguments</key>
 		<array>
-			<string>/opt/immich/app/start.sh</string>
+			<string>${IMMICH_APP_DIR}/start.sh</string>
 		</array>
 		<key>EnvironmentVariables</key>
 		<dict>
