@@ -134,6 +134,9 @@ build_immich "$staging_dir/immich" "$dist_dir"
 build_immich_machine_learning "$staging_dir/immich" "$dist_dir"
 fetch_immich_geodata "$dist_dir"
 
+# Fix paths in generated root directory
+grep -rlI --null "$root_dir" "$root_dir" | xargs -0 sed -i "" "s|$root_dir||g"
+
 # Copy PKG resources
 mkdir -p "$root_dir/Library/LaunchDaemons"
 find ./launchd -type f -name "*.plist" | while read -r f; do
