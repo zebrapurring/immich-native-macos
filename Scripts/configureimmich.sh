@@ -71,6 +71,3 @@ DB_VECTOR_EXTENSION="pgvector"
 REDIS_HOSTNAME="localhost"
 EOF
 fi
-
-# Adjust permissions
-chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_INSTALL_DIR"

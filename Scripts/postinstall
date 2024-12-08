@@ -19,5 +19,8 @@ echo "Running postinstall as $(whoami)"
 # Build Immich application
 "$(pwd)/configureimmich.sh"
 
+# Adjust permissions
+chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_INSTALL_DIR"
+
 # Install Launchd daemons
 "$(pwd)/installdaemons.sh"
