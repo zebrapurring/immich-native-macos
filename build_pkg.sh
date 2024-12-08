@@ -135,7 +135,7 @@ build_immich_machine_learning "$staging_dir/immich" "$dist_dir"
 fetch_immich_geodata "$dist_dir"
 
 # Fix paths in generated root directory
-grep -rlI --null "$root_dir" "$root_dir" | xargs -0 sed -i "" "s|$root_dir||g"
+grep -rlI --null "$root_dir" "$root_dir" | xargs -0 sed -i "" "s|$(realpath "$root_dir")||g"
 
 # Copy PKG resources
 mkdir -p "$root_dir/Library/LaunchDaemons"
