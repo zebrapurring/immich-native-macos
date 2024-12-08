@@ -27,3 +27,6 @@ echo "PATH=\"$homebrew_bindir:\$PATH\"" >> "$(pwd)/config.env"
 
 # Configure database
 "$(pwd)/configurepostgres.sh" "$POSTGRES_PASSWORD"
+
+# Remove existing installation
+rm -rf "$IMMICH_APP_DIR"
