@@ -20,7 +20,7 @@ set +a
 cd "$IMMICH_APP_DIR"
 exec node ./dist/main "\$@"
 EOF
-chmod 700 "$IMMICH_APP_DIR/start.sh"
+chmod 755 "$IMMICH_APP_DIR/start.sh"
 
 cat <<EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
 #!/bin/sh
@@ -42,7 +42,7 @@ exec gunicorn app.main:app \\
   --log-config-json log_conf.json \\
   --graceful-timeout 0
 EOF
-chmod 700 "$IMMICH_APP_DIR/machine-learning/start.sh"
+chmod 755 "$IMMICH_APP_DIR/machine-learning/start.sh"
 
 if [ ! -f "$IMMICH_SETTINGS_DIR/immich_server.env" ]; then
   cp "$IMMICH_SETTINGS_DIR/build_info.env" "$IMMICH_SETTINGS_DIR/immich_server.env"
