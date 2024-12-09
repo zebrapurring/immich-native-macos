@@ -48,7 +48,7 @@ if [ ! -f "$IMMICH_SETTINGS_DIR/immich_server.env" ]; then
   cp "$IMMICH_SETTINGS_DIR/build_info.env" "$IMMICH_SETTINGS_DIR/immich_server.env"
   cat <<EOF >> "$IMMICH_SETTINGS_DIR/immich_server.env"
 # Network binding
-IMMICH_HOST="0.0.0.0"
+IMMICH_HOST="127.0.0.1"
 IMMICH_PORT="2283"
 
 # Production settings
