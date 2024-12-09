@@ -50,6 +50,8 @@ if [ ! -f "$IMMICH_SETTINGS_DIR/immich_server.env" ]; then
 # Network binding
 IMMICH_HOST="127.0.0.1"
 IMMICH_PORT="2283"
+MACHINE_LEARNING_HOST="127.0.0.1"
+MACHINE_LEARNING_PORT="3003"
 
 # Production settings
 NO_COLOR="false"
@@ -59,6 +61,7 @@ IMMICH_ENV="production"
 # Paths configuration
 IMMICH_MEDIA_LOCATION="$IMMICH_MEDIA_DIR"
 IMMICH_BUILD_DATA="$IMMICH_APP_DIR/build"
+MACHINE_LEARNING_CACHE_FOLDER="$IMMICH_HOME_DIR/.immich-model-cache"
 
 # Database connection
 DB_HOSTNAME="localhost"
