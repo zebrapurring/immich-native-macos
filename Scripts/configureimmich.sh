@@ -20,7 +20,7 @@ set +a
 cd "$IMMICH_APP_DIR"
 exec node ./dist/main "\$@"
 EOF
-chmod 700 "$IMMICH_APP_DIR/start.sh"
+chmod 755 "$IMMICH_APP_DIR/start.sh"
 
 cat <<EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
 #!/bin/sh
@@ -42,14 +42,16 @@ exec gunicorn app.main:app \\
   --log-config-json log_conf.json \\
   --graceful-timeout 0
 EOF
-chmod 700 "$IMMICH_APP_DIR/machine-learning/start.sh"
+chmod 755 "$IMMICH_APP_DIR/machine-learning/start.sh"
 
 if [ ! -f "$IMMICH_SETTINGS_DIR/immich_server.env" ]; then
   cp "$IMMICH_SETTINGS_DIR/build_info.env" "$IMMICH_SETTINGS_DIR/immich_server.env"
   cat <<EOF >> "$IMMICH_SETTINGS_DIR/immich_server.env"
 # Network binding
-IMMICH_HOST="0.0.0.0"
+IMMICH_HOST="127.0.0.1"
 IMMICH_PORT="2283"
+MACHINE_LEARNING_HOST="127.0.0.1"
+MACHINE_LEARNING_PORT="3003"
 
 # Production settings
 NO_COLOR="false"
@@ -59,6 +61,7 @@ IMMICH_ENV="production"
 # Paths configuration
 IMMICH_MEDIA_LOCATION="$IMMICH_MEDIA_DIR"
 IMMICH_BUILD_DATA="$IMMICH_APP_DIR/build"
+MACHINE_LEARNING_CACHE_FOLDER="$IMMICH_HOME_DIR/.immich-model-cache"
 
 # Database connection
 DB_HOSTNAME="localhost"
