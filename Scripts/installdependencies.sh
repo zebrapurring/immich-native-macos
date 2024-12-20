@@ -5,7 +5,7 @@ set -eux
 echo "INFO: install dependencies"
 
 # Install root dependencies
-if [ "$USER" = "root" ]; then
+if [ "$(whoami)" = "root" ]; then
   mkdir -p "$IMMICH_BIN_DIR"
 
   # Install custom ffmpeg build jellyfin-ffmpeg
