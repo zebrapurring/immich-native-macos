@@ -11,7 +11,7 @@ fi
 
 # Create group
 dscl . -create "/Groups/$IMMICH_GROUP"
-dscl . -create "/Groups/$IMMICH_GROUP" RealName "Immich headless user"
+dscl . -create "/Groups/$IMMICH_GROUP" RealName "Immich group"
 dscl . -create "/Groups/$IMMICH_GROUP" passwd "*"
 dscl . -create "/Groups/$IMMICH_GROUP" gid 9999
 
