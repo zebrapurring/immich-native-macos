@@ -23,6 +23,7 @@ if [ "$USER" != "$(whoami)" ]; then
 fi
 
 # Install Homebrew dependencies
+export HOMEBREW_NO_AUTO_UPDATE=1
 [ -z "$(which brew)" ] && echo "Homebrew is not installed" && exit 1
 brew install \
   node \
