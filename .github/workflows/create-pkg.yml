@@ -35,6 +35,7 @@ jobs:
           brew install \
             node \
             npm \
+            python@3.12 \
             uv \
             vips
 
