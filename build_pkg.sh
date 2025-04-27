@@ -42,7 +42,7 @@ build_immich() {
   cd "$dest_dir"
   npm ci --foreground-scripts
   npm run build
-  npm prune --omit=dev --omit=optional
+  npm prune --omit=dev
   cd -
 
   # Build web frontend
