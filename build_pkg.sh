@@ -71,7 +71,8 @@ build_immich_machine_learning() {
   # Build the machine learning backend
   cp -R "$repo_dir/machine-learning" "$dest_dir/"
   cd "$dest_dir/machine-learning"
-  uv sync --python 3.12 --python-preference only-managed --extra cpu
+  uv venv --relocatable --python "$(brew --prefix python@3.12)/bin/python3.12"
+  uv sync --extra cpu
   cd -
 }
 

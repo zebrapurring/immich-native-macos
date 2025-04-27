@@ -29,7 +29,7 @@ set -a
 . "$IMMICH_SETTINGS_DIR/immich_server.env"
 set +a
 cd "$IMMICH_APP_DIR/machine-learning"
-. ./venv/bin/activate
+. ./.venv/bin/activate
 : "\${MACHINE_LEARNING_HOST:=127.0.0.1}"
 : "\${MACHINE_LEARNING_PORT:=3003}"
 : "\${MACHINE_LEARNING_WORKERS:=1}"
