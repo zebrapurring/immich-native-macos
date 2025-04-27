@@ -43,7 +43,6 @@ build_immich() {
   npm ci --foreground-scripts
   npm run build
   npm prune --omit=dev --omit=optional
-  npm install --os=darwin --cpu=arm64 sharp
   cd -
 
   # Build web frontend
@@ -55,7 +54,6 @@ build_immich() {
   npm --prefix "$dest_dir/open-api/typescript-sdk" prune --omit=dev --omit=optional
   cp -R "$repo_dir/web" "$dest_dir/"
   npm --prefix "$dest_dir/web" ci
-  npm --prefix "$dest_dir/web" install --os=darwin --cpu=arm64 sharp
   npm --prefix "$dest_dir/web" run build
   npm --prefix "$dest_dir/web" prune --omit=dev --omit=optional
   mkdir "$dest_dir/build"
