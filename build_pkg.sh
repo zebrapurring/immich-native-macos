@@ -43,7 +43,6 @@ build_immich() {
   npm ci --foreground-scripts
   npm run build
   npm prune --omit=dev --omit=optional
-  npm install --os=darwin --cpu=arm64 sharp
   cd -
 
   # Build web frontend
@@ -55,7 +54,6 @@ build_immich() {
   npm --prefix "$dest_dir/open-api/typescript-sdk" prune --omit=dev --omit=optional
   cp -R "$repo_dir/web" "$dest_dir/"
   npm --prefix "$dest_dir/web" ci
-  npm --prefix "$dest_dir/web" install --os=darwin --cpu=arm64 sharp
   npm --prefix "$dest_dir/web" run build
   npm --prefix "$dest_dir/web" prune --omit=dev --omit=optional
   mkdir "$dest_dir/build"
@@ -73,13 +71,7 @@ build_immich_machine_learning() {
   # Build the machine learning backend
   cp -R "$repo_dir/machine-learning" "$dest_dir/"
   cd "$dest_dir/machine-learning"
-  python3.11 -m venv "./venv"
-  (
-    # shellcheck disable=SC1091
-    . "./venv/bin/activate"
-    pip3.11 install poetry
-    poetry install --no-root --with dev --with cpu
-  )
+  uv sync --python 3.12 --python-preference only-managed --extra cpu
   cd -
 }
 
