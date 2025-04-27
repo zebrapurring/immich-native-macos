@@ -30,8 +30,8 @@ brew install \
   npm \
   pgvector \
   postgresql@17 \
-  python@3.11 \
   redis \
+  uv \
   vips \
   wget
 brew services restart postgresql@17

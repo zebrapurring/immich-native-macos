@@ -35,7 +35,7 @@ jobs:
           brew install \
             node \
             npm \
-            python@3.11 \
+            uv \
             vips
 
       # Step 4: Create Immich package

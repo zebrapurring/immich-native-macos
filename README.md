@@ -29,7 +29,7 @@ The following steps are performed by the installer:
     brew install \
         node \
         npm \
-        python@3.11 \
+        uv \
         vips
     ```
 3. Build the package

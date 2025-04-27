@@ -71,13 +71,7 @@ build_immich_machine_learning() {
   # Build the machine learning backend
   cp -R "$repo_dir/machine-learning" "$dest_dir/"
   cd "$dest_dir/machine-learning"
-  python3.11 -m venv "./venv"
-  (
-    # shellcheck disable=SC1091
-    . "./venv/bin/activate"
-    pip3.11 install poetry
-    poetry install --no-root --with dev --with cpu
-  )
+  uv sync --python 3.12 --python-preference only-managed --extra cpu
   cd -
 }
 
