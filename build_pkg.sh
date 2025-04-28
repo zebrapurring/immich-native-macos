@@ -40,6 +40,7 @@ build_immich() {
   # Build server backend
   cp -R "$repo_dir/server/" "$dest_dir/"
   cd "$dest_dir"
+  export PYTHON="python3.12"
   npm ci --foreground-scripts
   npm run build
   npm prune --omit=dev
