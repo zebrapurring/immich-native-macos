@@ -68,7 +68,6 @@ DB_HOSTNAME="localhost"
 DB_USERNAME="immich"
 DB_DATABASE_NAME="immich"
 DB_PASSWORD="$POSTGRES_PASSWORD"
-DB_VECTOR_EXTENSION="pgvector"
 
 # Redis connection
 REDIS_HOSTNAME="localhost"

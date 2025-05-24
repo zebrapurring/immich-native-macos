@@ -28,11 +28,30 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 brew install \
   node \
   npm \
-  pgvector \
   postgresql@17 \
   redis \
   python@3.12 \
+  rustup \
   vips \
   wget
+
+# Install VectorChord PostgreSQL extension
+VECTORCHORD_VERSION="0.4.0-fixapplesilicon"
+vectorchord_staging_dir="$(mktemp -d -t vectorchord)"
+git clone --branch "$VECTORCHORD_VERSION" https://github.com/zebrapurring/VectorChord "$vectorchord_staging_dir"
+cd "$vectorchord_staging_dir"
+rustup-init --profile minimal --default-toolchain none -y
+export PATH="$HOME/.cargo/bin:$PATH"
+cargo install cargo-pgrx@"$(sed -n 's/.*pgrx = { version = "\(=.*\)",.*/\1/p' Cargo.toml)" --locked
+cargo pgrx init --pg17 pg_config-17
+cargo pgrx install --release --pg-config pg_config-17 || true
+vectorchord_lib="$(pg_config-17 --libdir)/vchord.dylib"
+test -f "$vectorchord_lib"
+sed -E -i "" "s|^#?shared_preload_libraries .*$|shared_preload_libraries = '$vectorchord_lib'|" "$(brew --prefix)/var/postgresql@17/postgresql.conf"
+cp -a ./sql/upgrade/. "$(pg_config-17 --sharedir)/extension"
+cd -
+rm -rf "$vectorchord_staging_dir"
+
+# Start services
 brew services restart postgresql@17
 brew services restart redis
