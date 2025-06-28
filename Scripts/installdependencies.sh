@@ -9,7 +9,7 @@ if [ "$(whoami)" = "root" ]; then
   mkdir -p "$IMMICH_BIN_DIR"
 
   # Install custom ffmpeg build jellyfin-ffmpeg
-  curl -s -L -o - "https://github.com/jellyfin/jellyfin-ffmpeg/releases/download/v$FFMPEG_VERSION/jellyfin-ffmpeg_${FFMPEG_VERSION}_portable_macarm64-gpl.tar.xz" | \
+  curl -s -L -o - "https://github.com/jellyfin/jellyfin-ffmpeg/releases/download/v$FFMPEG_VERSION/jellyfin-ffmpeg_${FFMPEG_VERSION}_portable_macarm64-gpl.tar.xz" |
     tar xzvf - -C "$IMMICH_BIN_DIR"
 
   # Adjust permissions

@@ -9,7 +9,7 @@ set +a
 
 # Configure logging
 install_logfile="/tmp/immich-install.log"
-exec >> "$install_logfile" 2>&1
+exec >>"$install_logfile" 2>&1
 
 echo "Running postinstall as $(whoami)"
 

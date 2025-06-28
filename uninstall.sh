@@ -20,7 +20,7 @@ uninstall_daemons() {
 
 delete_postgres_db() {
   echo "INFO: deleting PostgreSQL immich user and database"
-  psql-17 postgres << EOF
+  psql-17 postgres <<EOF
 drop database immich;
 drop user immich;
 EOF
@@ -30,8 +30,8 @@ echo "WARNING: this will remove the Immich database and the complete installatio
 echo "Continue? (y/n) "
 read -r yn
 case "$yn" in
-  [Yy]*) ;;
-  *) exit;;
+[Yy]*) ;;
+*) exit ;;
 esac
 
 uninstall_daemons

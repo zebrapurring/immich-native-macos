@@ -4,7 +4,7 @@ set -eux
 
 echo "INFO: create user"
 
-if dscl . -list "/Users/$IMMICH_USER" > /dev/null 2>&1; then
+if dscl . -list "/Users/$IMMICH_USER" >/dev/null 2>&1; then
   # User already exists
   exit
 fi
@@ -29,5 +29,5 @@ dscl . -create "/Groups/$IMMICH_GROUP" GroupMembership "$IMMICH_USER"
 
 # Create home directory
 mkdir -p "$IMMICH_HOME_DIR"
-echo "umask 077" > "$IMMICH_HOME_DIR/.bashrc"
+echo "umask 077" >"$IMMICH_HOME_DIR/.bashrc"
 chown -R "$IMMICH_USER:$IMMICH_GROUP" "$IMMICH_HOME_DIR"

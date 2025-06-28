@@ -18,7 +18,7 @@ clone_immich() {
 
   # Dump information about the build revision
   mkdir -p "$conf_dir"
-  cat <<EOF > "$conf_dir/build_info.env"
+  cat <<EOF >"$conf_dir/build_info.env"
 # Build information
 IMMICH_BUILD=""
 IMMICH_BUILD_URL=""
@@ -62,7 +62,7 @@ build_immich() {
   rm -rf "$dest_dir/open-api" "$dest_dir/i18n" "$dest_dir/web"
 
   # Generate empty build lockfile
-  echo "{}" > "$dest_dir/build/build-lock.json"
+  echo "{}" >"$dest_dir/build/build-lock.json"
 }
 
 build_immich_machine_learning() {
@@ -87,7 +87,7 @@ fetch_immich_geodata() {
   curl -o "$dest_dir/build/geodata/admin1CodesASCII.txt" https://download.geonames.org/export/dump/admin1CodesASCII.txt
   curl -o "$dest_dir/build/geodata/admin2Codes.txt" https://download.geonames.org/export/dump/admin2Codes.txt
   curl -o "$dest_dir/build/geodata/ne_10m_admin_0_countries.geojson" https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson
-  date -u +"%Y-%m-%dT%H:%M:%S%z" | tr -d "\n" > "$dest_dir/build/geodata/geodata-date.txt"
+  date -u +"%Y-%m-%dT%H:%M:%S%z" | tr -d "\n" >"$dest_dir/build/geodata/geodata-date.txt"
   chmod -R 444 "$dest_dir/build/geodata"/*
 }
 
@@ -134,7 +134,7 @@ grep -rlI --null "$root_dir" "$root_dir" | xargs -0 sed -i "" "s|$(realpath "$ro
 mkdir -p "$root_dir/Library/LaunchDaemons"
 find ./launchd -type f -name "*.plist" | while read -r f; do
   filename="$(basename "$f")"
-  envsubst < "$f" > "$root_dir/Library/LaunchDaemons/$filename"
+  envsubst <"$f" >"$root_dir/Library/LaunchDaemons/$filename"
 done
 
 # Create PKG installer

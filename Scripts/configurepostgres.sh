@@ -12,7 +12,7 @@ fi
 
 DB_PASSWORD="$1"
 
-psql-17 postgres << EOF
+psql-17 postgres <<EOF
 CREATE DATABASE immich;
 CREATE USER immich WITH ENCRYPTED PASSWORD '$DB_PASSWORD';
 GRANT ALL PRIVILEGES ON DATABASE immich TO immich;

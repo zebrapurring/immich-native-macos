@@ -5,7 +5,7 @@ set -eux
 # Generate database password
 POSTGRES_PASSWORD="$(dd if=/dev/urandom bs=1 count=100 status=none | md5 -q)"
 if ! grep -q "^POSTGRES_PASSWORD" "$(pwd)/config.env"; then
-    echo "POSTGRES_PASSWORD=\"$POSTGRES_PASSWORD\"" >> "$(pwd)/config.env"
+    echo "POSTGRES_PASSWORD=\"$POSTGRES_PASSWORD\"" >>"$(pwd)/config.env"
 fi
 
 set -a
@@ -16,14 +16,14 @@ set +a
 # Configure logging
 install_logfile="/tmp/immich-install.log"
 "$(pwd)/createlog.sh" "$install_logfile"
-exec >> "$install_logfile" 2>&1
+exec >>"$install_logfile" 2>&1
 
 echo "Running preinstall as $(whoami)"
 
 # Install dependencies
 "$(pwd)/installdependencies.sh"
 homebrew_bindir="$(su -l "$USER" -c "which brew" | xargs -I {} dirname "{}")"
-echo "PATH=\"$homebrew_bindir:\$PATH\"" >> "$(pwd)/config.env"
+echo "PATH=\"$homebrew_bindir:\$PATH\"" >>"$(pwd)/config.env"
 
 # Configure database
 "$(pwd)/configurepostgres.sh" "$POSTGRES_PASSWORD"
