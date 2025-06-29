@@ -39,18 +39,18 @@ brew install \
 rustup-init --profile minimal --default-toolchain none -y
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Install PostgreSQL extension VectorChord version 0.3.0 patched for macOS
-VECTORCHORD_VERSION="0.3.0"
+# Install PostgreSQL extension VectorChord
+VECTORCHORD_VERSION="0.4.2" # Taken from https://github.com/immich-app/immich/blob/main/docker/docker-compose.yml
 vectorchord_staging_dir="$(mktemp -d -t vectorchord)"
-git clone --branch "$VECTORCHORD_VERSION" https://github.com/usamoi/VectorChord "$vectorchord_staging_dir"
+git clone --branch "$VECTORCHORD_VERSION" https://github.com/tensorchord/VectorChord "$vectorchord_staging_dir"
 cd "$vectorchord_staging_dir"
-git cherry-pick --strategy-option theirs 89575d3
 PGRX_PG_CONFIG_PATH="$(brew --prefix postgresql@17)/bin/pg_config" \
   cargo pgrx install \
-    -p vchord \
-    --features pg17 \
-    --release \
-    --pg-config "$(brew --prefix postgresql@17)/bin/pg_config"
+  -p vchord \
+  --features pg17 \
+  --release \
+  --pg-config "$(brew --prefix postgresql@17)/bin/pg_config"
+cp -a ./sql/upgrade/. "$("$(brew --prefix postgresql@17)/bin/pg_config" --sharedir)/extension"
 sed -E -i "" "s|^#?shared_preload_libraries .*$|shared_preload_libraries = 'vchord.dylib'|" "$(brew --prefix)/var/postgresql@17/postgresql.conf"
 cd -
 rm -rf "$vectorchord_staging_dir"
