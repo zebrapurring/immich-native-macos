@@ -3,22 +3,22 @@
 set -eu
 
 if [ "${1:-}" = "-v" ]; then
-  set -x
+    set -x
 fi
 
 clone_immich() {
-  git_tag="$1"
-  repo_dir="$2"
-  conf_dir="$3"
+    git_tag="$1"
+    repo_dir="$2"
+    conf_dir="$3"
 
-  # Clone the repository
-  if [ ! -d "$repo_dir" ]; then
-    git clone --depth 1 --branch "$git_tag" https://github.com/immich-app/immich "$repo_dir"
-  fi
+    # Clone the repository
+    if [ ! -d "$repo_dir" ]; then
+        git clone --depth 1 --branch "$git_tag" https://github.com/immich-app/immich "$repo_dir"
+    fi
 
-  # Dump information about the build revision
-  mkdir -p "$conf_dir"
-  cat <<EOF > "$conf_dir/build_info.env"
+    # Dump information about the build revision
+    mkdir -p "$conf_dir"
+    cat << EOF > "$conf_dir/build_info.env"
 # Build information
 IMMICH_BUILD=""
 IMMICH_BUILD_URL=""
@@ -34,75 +34,75 @@ EOF
 }
 
 build_immich() {
-  repo_dir="$1"
-  dest_dir="$2"
+    repo_dir="$1"
+    dest_dir="$2"
 
-  # Build server backend
-  cp -R "$repo_dir/server/" "$dest_dir/"
-  cd "$dest_dir"
-  export PYTHON="python3.12"
-  npm ci --foreground-scripts
-  npm run build
-  npm prune --omit=dev
-  cd -
+    # Build server backend
+    cp -R "$repo_dir/server/" "$dest_dir/"
+    cd "$dest_dir"
+    export PYTHON="python3.12"
+    npm ci --foreground-scripts
+    npm run build
+    npm prune --omit=dev
+    cd -
 
-  # Build web frontend
-  mkdir -p "$dest_dir/open-api"
-  cp -R "$repo_dir/open-api/typescript-sdk" "$dest_dir/open-api/"
-  cp -R "$repo_dir/i18n" "$dest_dir"
-  npm --prefix "$dest_dir/open-api/typescript-sdk" ci
-  npm --prefix "$dest_dir/open-api/typescript-sdk" run build
-  npm --prefix "$dest_dir/open-api/typescript-sdk" prune --omit=dev --omit=optional
-  cp -R "$repo_dir/web" "$dest_dir/"
-  npm --prefix "$dest_dir/web" ci
-  npm --prefix "$dest_dir/web" run build
-  npm --prefix "$dest_dir/web" prune --omit=dev --omit=optional
-  mkdir "$dest_dir/build"
-  mv "$dest_dir/web/build" "$dest_dir/build/www"
-  rm -rf "$dest_dir/open-api" "$dest_dir/i18n" "$dest_dir/web"
+    # Build web frontend
+    mkdir -p "$dest_dir/open-api"
+    cp -R "$repo_dir/open-api/typescript-sdk" "$dest_dir/open-api/"
+    cp -R "$repo_dir/i18n" "$dest_dir"
+    npm --prefix "$dest_dir/open-api/typescript-sdk" ci
+    npm --prefix "$dest_dir/open-api/typescript-sdk" run build
+    npm --prefix "$dest_dir/open-api/typescript-sdk" prune --omit=dev --omit=optional
+    cp -R "$repo_dir/web" "$dest_dir/"
+    npm --prefix "$dest_dir/web" ci
+    npm --prefix "$dest_dir/web" run build
+    npm --prefix "$dest_dir/web" prune --omit=dev --omit=optional
+    mkdir "$dest_dir/build"
+    mv "$dest_dir/web/build" "$dest_dir/build/www"
+    rm -rf "$dest_dir/open-api" "$dest_dir/i18n" "$dest_dir/web"
 
-  # Generate empty build lockfile
-  echo "{}" > "$dest_dir/build/build-lock.json"
+    # Generate empty build lockfile
+    echo "{}" > "$dest_dir/build/build-lock.json"
 }
 
 build_immich_machine_learning() {
-  repo_dir="$1"
-  dest_dir="$2"
+    repo_dir="$1"
+    dest_dir="$2"
 
-  # Build the machine learning backend
-  cp -R "$repo_dir/machine-learning" "$dest_dir/"
-  cd "$dest_dir/machine-learning"
-  uv venv --relocatable --python "$(brew --prefix python@3.12)/bin/python3.12"
-  uv sync --extra cpu
-  cd -
+    # Build the machine learning backend
+    cp -R "$repo_dir/machine-learning" "$dest_dir/"
+    cd "$dest_dir/machine-learning"
+    uv venv --relocatable --python "$(brew --prefix python@3.12)/bin/python3.12"
+    uv sync --extra cpu
+    cd -
 }
 
 fetch_immich_geodata() {
-  dest_dir="$1"
+    dest_dir="$1"
 
-  # Download geodata
-  mkdir -p "$dest_dir/build/geodata"
-  curl -o "$dest_dir/build/geodata/cities500.zip" https://download.geonames.org/export/dump/cities500.zip
-  unzip "$dest_dir/build/geodata/cities500.zip" -d "$dest_dir/build/geodata" && rm "$dest_dir/build/geodata/cities500.zip"
-  curl -o "$dest_dir/build/geodata/admin1CodesASCII.txt" https://download.geonames.org/export/dump/admin1CodesASCII.txt
-  curl -o "$dest_dir/build/geodata/admin2Codes.txt" https://download.geonames.org/export/dump/admin2Codes.txt
-  curl -o "$dest_dir/build/geodata/ne_10m_admin_0_countries.geojson" https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson
-  date -u +"%Y-%m-%dT%H:%M:%S%z" | tr -d "\n" > "$dest_dir/build/geodata/geodata-date.txt"
-  chmod -R 444 "$dest_dir/build/geodata"/*
+    # Download geodata
+    mkdir -p "$dest_dir/build/geodata"
+    curl -o "$dest_dir/build/geodata/cities500.zip" https://download.geonames.org/export/dump/cities500.zip
+    unzip "$dest_dir/build/geodata/cities500.zip" -d "$dest_dir/build/geodata" && rm "$dest_dir/build/geodata/cities500.zip"
+    curl -o "$dest_dir/build/geodata/admin1CodesASCII.txt" https://download.geonames.org/export/dump/admin1CodesASCII.txt
+    curl -o "$dest_dir/build/geodata/admin2Codes.txt" https://download.geonames.org/export/dump/admin2Codes.txt
+    curl -o "$dest_dir/build/geodata/ne_10m_admin_0_countries.geojson" https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson
+    date -u +"%Y-%m-%dT%H:%M:%S%z" | tr -d "\n" > "$dest_dir/build/geodata/geodata-date.txt"
+    chmod -R 444 "$dest_dir/build/geodata"/*
 }
 
 create_pkg() {
-  root_dir="$1"
-  out_pkg="$2"
+    root_dir="$1"
+    out_pkg="$2"
 
-  # Create PKG installer
-  pkgbuild \
-    --version "$IMMICH_TAG" \
-    --root "$root_dir" \
-    --identifier com.unofficial.immich.installer \
-    --scripts ./Scripts \
-    --install-location "/" \
-    "$out_pkg"
+    # Create PKG installer
+    pkgbuild \
+        --version "$IMMICH_TAG" \
+        --root "$root_dir" \
+        --identifier com.unofficial.immich.installer \
+        --scripts ./Scripts \
+        --install-location "/" \
+        "$out_pkg"
 }
 
 # Load configuration environment
@@ -133,8 +133,8 @@ grep -rlI --null "$root_dir" "$root_dir" | xargs -0 sed -i "" "s|$(realpath "$ro
 # Copy PKG resources
 mkdir -p "$root_dir/Library/LaunchDaemons"
 find ./launchd -type f -name "*.plist" | while read -r f; do
-  filename="$(basename "$f")"
-  envsubst < "$f" > "$root_dir/Library/LaunchDaemons/$filename"
+    filename="$(basename "$f")"
+    envsubst < "$f" > "$root_dir/Library/LaunchDaemons/$filename"
 done
 
 # Create PKG installer

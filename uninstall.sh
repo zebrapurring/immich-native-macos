@@ -6,21 +6,21 @@ set -eux
 . Scripts/config.env
 
 delete_user() {
-  echo "INFO: deleting user"
-  sudo dscl . -delete "/Groups/$IMMICH_GROUP"
-  sudo dscl . -delete "/Users/$IMMICH_USER"
+    echo "INFO: deleting user"
+    sudo dscl . -delete "/Groups/$IMMICH_GROUP"
+    sudo dscl . -delete "/Users/$IMMICH_USER"
 }
 
 uninstall_daemons() {
-  echo "INFO: uninstalling daemons"
-  sudo launchctl bootout system /Library/LaunchDaemons/com.immich.machine.learning.plist
-  sudo launchctl bootout system /Library/LaunchDaemons/com.immich.plist
-  sudo rm -f /Library/LaunchDaemons/com.immich*plist
+    echo "INFO: uninstalling daemons"
+    sudo launchctl bootout system /Library/LaunchDaemons/com.immich.machine.learning.plist
+    sudo launchctl bootout system /Library/LaunchDaemons/com.immich.plist
+    sudo rm -f /Library/LaunchDaemons/com.immich*plist
 }
 
 delete_postgres_db() {
-  echo "INFO: deleting PostgreSQL immich user and database"
-  psql-17 postgres << EOF
+    echo "INFO: deleting PostgreSQL immich user and database"
+    psql-17 postgres << EOF
 drop database immich;
 drop user immich;
 EOF
@@ -30,8 +30,8 @@ echo "WARNING: this will remove the Immich database and the complete installatio
 echo "Continue? (y/n) "
 read -r yn
 case "$yn" in
-  [Yy]*) ;;
-  *) exit;;
+    [Yy]*) ;;
+    *) exit ;;
 esac
 
 uninstall_daemons

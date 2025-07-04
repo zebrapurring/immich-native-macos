@@ -11,7 +11,7 @@ mkdir -p "$IMMICH_MEDIA_DIR"
 
 # Create custom start scripts
 mkdir -p "$IMMICH_SETTINGS_DIR"
-cat <<EOF > "$IMMICH_APP_DIR/start.sh"
+cat << EOF > "$IMMICH_APP_DIR/start.sh"
 #!/bin/sh
 set -eu
 set -a
@@ -22,7 +22,7 @@ exec node ./dist/main "\$@"
 EOF
 chmod 755 "$IMMICH_APP_DIR/start.sh"
 
-cat <<EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
+cat << EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
 #!/bin/sh
 set -eu
 set -a
@@ -45,8 +45,8 @@ EOF
 chmod 755 "$IMMICH_APP_DIR/machine-learning/start.sh"
 
 if [ ! -f "$IMMICH_SETTINGS_DIR/immich_server.env" ]; then
-  cp "$IMMICH_SETTINGS_DIR/build_info.env" "$IMMICH_SETTINGS_DIR/immich_server.env"
-  cat <<EOF >> "$IMMICH_SETTINGS_DIR/immich_server.env"
+    cp "$IMMICH_SETTINGS_DIR/build_info.env" "$IMMICH_SETTINGS_DIR/immich_server.env"
+    cat << EOF >> "$IMMICH_SETTINGS_DIR/immich_server.env"
 # Network binding
 IMMICH_HOST="127.0.0.1"
 IMMICH_PORT="2283"
