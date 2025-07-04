@@ -6,8 +6,8 @@ echo "INFO: configure postgresql"
 
 # Re-run script as appropriate user
 if [ "$USER" != "$(whoami)" ]; then
-  su -l "$USER" -c "$0 $*"
-  exit
+    su -l "$USER" -c "$0 $*"
+    exit
 fi
 
 DB_PASSWORD="$1"
