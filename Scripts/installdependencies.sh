@@ -27,7 +27,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 [ -z "$(which brew)" ] && echo "Homebrew is not installed" && exit 1
 brew install \
     node \
-    npm \
+    pnpm \
     postgresql@17 \
     redis \
     python@3.12 \

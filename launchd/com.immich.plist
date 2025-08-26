@@ -10,7 +10,7 @@
 		<string>${IMMICH_USER}</string>
 		<key>ProgramArguments</key>
 		<array>
-			<string>${IMMICH_APP_DIR}/start.sh</string>
+			<string>${IMMICH_APP_DIR}/server/start.sh</string>
 		</array>
 		<key>EnvironmentVariables</key>
 		<dict>

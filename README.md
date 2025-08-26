@@ -27,7 +27,7 @@ The following steps are performed by the installer:
     ```sh
     brew install \
         node \
-        npm \
+        pnpm \
         uv \
         vips
     ```
