@@ -36,33 +36,28 @@ EOF
 build_immich() {
     repo_dir="$1"
     dest_dir="$2"
+    cd "$repo_dir"
 
     # Build server backend
-    cp -R "$repo_dir/server/" "$dest_dir/"
-    cd "$dest_dir"
     export PYTHON="python3.12"
-    npm ci --foreground-scripts
-    npm run build
-    npm prune --omit=dev
-    cd -
+    pnpm --filter immich --frozen-lockfile build
+    pnpm --filter immich --frozen-lockfile --prod --no-optional deploy "$dest_dir/server"
 
     # Build web frontend
-    mkdir -p "$dest_dir/open-api"
-    cp -R "$repo_dir/open-api/typescript-sdk" "$dest_dir/open-api/"
-    cp -R "$repo_dir/i18n" "$dest_dir"
-    npm --prefix "$dest_dir/open-api/typescript-sdk" ci
-    npm --prefix "$dest_dir/open-api/typescript-sdk" run build
-    npm --prefix "$dest_dir/open-api/typescript-sdk" prune --omit=dev --omit=optional
-    cp -R "$repo_dir/web" "$dest_dir/"
-    npm --prefix "$dest_dir/web" ci
-    npm --prefix "$dest_dir/web" run build
-    npm --prefix "$dest_dir/web" prune --omit=dev --omit=optional
-    mkdir "$dest_dir/build"
-    mv "$dest_dir/web/build" "$dest_dir/build/www"
-    rm -rf "$dest_dir/open-api" "$dest_dir/i18n" "$dest_dir/web"
+    pnpm --filter @immich/sdk --filter immich-web --frozen-lockfile --force install
+    pnpm --filter @immich/sdk --filter immich-web build
+    mkdir -p "$dest_dir/build"
+    cp -R ./web/build "$dest_dir/build/www"
+
+    # Build CLI
+    pnpm --filter @immich/sdk --filter @immich/cli --frozen-lockfile install
+    pnpm --filter @immich/sdk --filter @immich/cli build
+    pnpm --filter @immich/cli --prod --no-optional deploy "$dest_dir/cli"
 
     # Generate empty build lockfile
     echo "{}" > "$dest_dir/build/build-lock.json"
+
+    cd -
 }
 
 build_immich_machine_learning() {
@@ -113,7 +108,7 @@ set +a
 pkg_filename="Unofficial Immich Installer $IMMICH_TAG.pkg"
 
 # Create staging directories
-output_dir="./output"
+output_dir="$(pwd)/output"
 staging_dir="$output_dir/staging"
 root_dir="$staging_dir/root"
 dist_dir="$root_dir/$IMMICH_APP_DIR"

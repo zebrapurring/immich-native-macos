@@ -10,17 +10,17 @@ chown -R "$IMMICH_USER:$IMMICH_GROUP" /var/log/immich
 mkdir -p "$IMMICH_MEDIA_DIR"
 
 # Create custom start scripts
-mkdir -p "$IMMICH_SETTINGS_DIR"
-cat << EOF > "$IMMICH_APP_DIR/start.sh"
+mkdir -p "$IMMICH_SETTINGS_DIR/server"
+cat << EOF > "$IMMICH_APP_DIR/server/start.sh"
 #!/bin/sh
 set -eu
 set -a
 . "$IMMICH_SETTINGS_DIR/immich_server.env"
 set +a
-cd "$IMMICH_APP_DIR"
+cd "$IMMICH_APP_DIR/server"
 exec node ./dist/main "\$@"
 EOF
-chmod 755 "$IMMICH_APP_DIR/start.sh"
+chmod 755 "$IMMICH_APP_DIR/server/start.sh"
 
 cat << EOF > "$IMMICH_APP_DIR/machine-learning/start.sh"
 #!/bin/sh
