@@ -33,6 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install \
+            mise \
             node \
             pnpm \
             python@3.12 \
