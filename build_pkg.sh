@@ -54,6 +54,12 @@ build_immich() {
     pnpm --filter @immich/sdk --filter @immich/cli build
     pnpm --filter @immich/cli --prod --no-optional deploy "$dest_dir/cli"
 
+    # Build plugins
+    mise --yes --cd plugins build
+    mkdir -p "$dest_dir/build/corePlugin/dist"
+    cp ./plugins/manifest.json "$dest_dir/build/corePlugin/manifest.json"
+    cp -R ./plugins/dist "$dest_dir/build/corePlugin/dist"
+
     # Generate empty build lockfile
     echo "{}" > "$dest_dir/build/build-lock.json"
 
